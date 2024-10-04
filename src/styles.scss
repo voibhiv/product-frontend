@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import '../node_modules/primeng/resources/themes/lara-light-blue/theme.css';
+@import '../node_modules/primeicons/primeicons.css';
+@import '../node_modules/primeng/resources/primeng.min.css';
+
+// Colors Pallete
+$orange-50: #fff8f3;
+$orange-100: #feddc7;
+$orange-200: #fcc39b;
+$orange-300: #fba86f;
+$orange-400: #fa8e42;
+$orange-500: #f97316;
+$orange-600: #d46213;
+$orange-700: #ae510f;
+$orange-800: #893f0c;
+$orange-900: #642e09;
+
+// System pattern
+$primary: $orange-600;
+$seconady: #ffffff;
