@@ -1,4 +1,4 @@
 <div>
   <app-form-product />
-  <app-list-products [products]="products" />
+  <app-list-products [products]="(products$ | async) || []" />
 </div>

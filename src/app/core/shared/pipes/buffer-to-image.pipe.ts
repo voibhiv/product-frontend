@@ -7,7 +7,9 @@ import { Buffer } from 'buffer'; // Usar o Buffer de Node.js
 })
 export class BufferToImagePipe implements PipeTransform {
   transform(value: Buffer): string {
-    const base64 = value.toString('base64');
-    return `data:image/png;base64,${base64}`;
+    const buffer = Buffer.from(value);
+
+    const base64 = buffer.toString('base64');
+    return `data:image/png;base64,${base64}`; 
   }
 }

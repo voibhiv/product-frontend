@@ -7,8 +7,8 @@ import { provideHttpClient } from '@angular/common/http';
 // import { productsReducer } from './core/stores/products/reducers';
 // import { ProductEffect } from './core/stores/products/effects';
 import { provideEffects } from '@ngrx/effects';
-import { productReducer } from './core/states/products/reducer';
-import { ProductEffects } from './core/states/products/effects';
+import { productReducer } from './core/store/products/reducer';
+import { ProductEffects } from './core/store/products/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [

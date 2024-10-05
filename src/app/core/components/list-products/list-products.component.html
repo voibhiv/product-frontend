@@ -29,12 +29,10 @@
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 5rem"></th>
-        <th pSortableColumn="id">Código <p-sortIcon field="id" /></th>
+        <th>Código</th>
         <th>Imagem</th>
-        <th pSortableColumn="description">
-          Descrição <p-sortIcon field="description" />
-        </th>
-        <th pSortableColumn="cost">Custo (R$) <p-sortIcon field="cost" /></th>
+        <th>Descrição</th>
+        <th>Custo (R$)</th>
         <th></th>
       </tr>
     </ng-template>
@@ -108,15 +106,9 @@
             <p-table [value]="product.shops" dataKey="shopId">
               <ng-template pTemplate="header">
                 <tr>
-                  <th pSortableColumn="shopId">
-                    Código <p-sortIcon field="shopId" />
-                  </th>
-                  <th pSortableColumn="description">
-                    Loja <p-sortIcon field="description" />
-                  </th>
-                  <th pSortableColumn="shopPrice">
-                    Preço <p-sortIcon field="shopPrice" />
-                  </th>
+                  <th>Código</th>
+                  <th>Loja</th>
+                  <th>Preço</th>
                 </tr>
               </ng-template>
 
