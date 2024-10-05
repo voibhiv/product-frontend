@@ -54,6 +54,21 @@
         </td>
         <td>{{ product.id }}</td>
         <td>
+          @if (product.image) {
+            <img
+              [src]="product.image | bufferToImage"
+              alt="Imagem do produto"
+              width="70"
+              class="shadow-4 border-round-xs"
+            />
+          } @else {
+            <img
+              src="assets/images/no-image.jpg"
+              alt="Imagem dizendo que não foi cadastrada nenhuma imagem para este produto"
+              width="70"
+              class="shadow-4 border-round-md"
+            />
+          }
           <!-- <img
             [src]="
               'https://primefaces.org/cdn/primeng/images/demo/product/' +

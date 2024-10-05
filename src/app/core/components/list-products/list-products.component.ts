@@ -4,11 +4,18 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { BufferToImagePipe } from '../../shared/pipes/buffer-to-image.pipe';
 
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [RippleModule, TableModule, ButtonModule, CommonModule],
+  imports: [
+    RippleModule,
+    TableModule,
+    ButtonModule,
+    CommonModule,
+    BufferToImagePipe,
+  ],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.scss',
 })

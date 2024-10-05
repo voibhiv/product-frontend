@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
     {
       id: 2,
       description: 'Product description 2',
-      cost: 336.25,
+      cost: 306.25,
       image: null,
       shops: [
         {
@@ -43,14 +43,14 @@ export class HomeComponent implements OnInit {
     {
       id: 3,
       description: 'Product description 3',
-      cost: 336.25,
+      cost: 326.25,
       image: null,
       shops: [],
     },
     {
       id: 4,
       description: 'Product description 4',
-      cost: 336.25,
+      cost: 236.25,
       image: null,
       shops: [
         {
@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit {
     {
       id: 5,
       description: 'Product description 5',
-      cost: 336.25,
+      cost: 536.25,
       image: null,
       shops: [
         {
