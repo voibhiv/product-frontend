@@ -4,6 +4,10 @@ import { Product } from '../../core/interfaces/product.interface';
 import { ListProductsComponent } from '../../core/components/list-products/list-products.component';
 import { CommonModule } from '@angular/common';
 import { FormProductComponent } from '../../core/components/form-product/form-product.component';
+import { Store } from '@ngrx/store';
+import { selectAllProducts, selectLoading, selectError } from '../../core/states/products/selector';
+import { Observable } from 'rxjs';
+import { loadProducts } from '../../core/states/products/action';
 
 @Component({
   selector: 'app-home',
@@ -75,22 +79,22 @@ export class HomeComponent implements OnInit {
     },
   ];
 
-  constructor() {} // private productService: ProductService
+  products$: Observable<Product[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
 
-  ngOnInit() {
-    // this.productService.getProductsMini().then((data) => {
-    //   this.products = data;
-    // });
+
+  constructor(
+    private store: Store
+  ) {
+    this.products$ = this.store.select(selectAllProducts);
+    this.loading$ = this.store.select(selectLoading);
+    this.error$ = this.store.select(selectError);
   }
 
-  // getSeverity(status: string) {
-  //   switch (status) {
-  //     case 'INSTOCK':
-  //       return 'success';
-  //     case 'LOWSTOCK':
-  //       return 'warning';
-  //     case 'OUTOFSTOCK':
-  //       return 'danger';
-  //   }
-  // }
+  ngOnInit() {
+    console.log('Dispatching loadProducts action');
+    this.store.dispatch(loadProducts());
+  }
+
 }
