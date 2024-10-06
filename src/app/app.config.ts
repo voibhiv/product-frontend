@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,6 +13,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideEffects } from '@ngrx/effects';
 import { productReducer } from './core/store/products/reducer';
 import { ProductEffects } from './core/store/products/effects';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideStore({ products: productReducer }),
     provideEffects([ProductEffects]),
+    provideEnvironmentNgxMask(),
+    importProvidersFrom([BrowserModule, BrowserAnimationsModule]),
   ],
 };

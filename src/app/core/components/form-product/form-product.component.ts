@@ -8,13 +8,20 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { IGetPaginateProducts } from '../../services/product/interfaces/get-paginate-products.interface';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; // Import NgxMaskDirective
 
 @Component({
   selector: 'app-form-product',
   standalone: true,
-  imports: [ReactiveFormsModule, InputTextModule, ButtonModule],
+  imports: [
+    ReactiveFormsModule,
+    InputTextModule,
+    ButtonModule,
+    NgxMaskDirective,
+  ],
   templateUrl: './form-product.component.html',
   styleUrls: ['./form-product.component.scss'],
+  providers: [provideNgxMask()],
 })
 export class FormProductComponent {
   @Output() requestForm = new EventEmitter<
@@ -22,15 +29,13 @@ export class FormProductComponent {
   >();
 
   productSearchForm = new FormGroup({
-    code: new FormControl<number | null>(null, [Validators.pattern(/^\d*$/)]),
+    code: new FormControl<number | null>(null, [Validators.pattern(/^\d+$/)]),
     description: new FormControl(''),
     cost: new FormControl<number | null>(null, [
-      Validators.required,
-      Validators.pattern(/^\d{1,13}(,\d{0,3})?$/),
+      Validators.pattern(/^(?!.*[a-zA-Z])(?:\d{1,13}|\d{1,12}(?:\.\d{1,3})?)$/),
     ]),
     shopPrice: new FormControl<number | null>(null, [
-      Validators.required,
-      Validators.pattern(/^\d{1,13}(,\d{0,3})?$/),
+      Validators.pattern(/^(?!.*[a-zA-Z])(?:\d{1,13}|\d{1,12}(?:\.\d{1,3})?)$/),
     ]),
   });
 

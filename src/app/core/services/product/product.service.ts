@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { IGetPaginateProducts } from './interfaces/get-paginate-products.interface';
 import { IGetProductResponse } from './interfaces/product-get.response.interface';
+import { IDeleteProductResponse } from './interfaces/product-delete.response.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -24,10 +25,14 @@ export class ProductService {
     if (cost) params = params.set('cost', cost.toString());
     if (shopPrice) params = params.set('shopPrice', shopPrice.toString());
 
-    console.log('chamando service');
-    console.log(params);
     return this.http.get<IGetProductResponse>(`${this.apiUrl}/product`, {
       params,
     });
+  }
+
+  deleteProduct(id: number) {
+    return this.http.delete<IDeleteProductResponse>(
+      `${this.apiUrl}/product/${id}`,
+    );
   }
 }

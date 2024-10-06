@@ -1,146 +1,144 @@
-<div class="card">
-  <div class="title-list-table">
-    <h1>Produtos</h1>
+<div>
+  <p-confirmDialog />
+  <div class="card">
+    <div class="title-list-table">
+      <h1>Produtos</h1>
+    </div>
+
+    <p-table
+      dataKey="id"
+      styleClass="p-datatable-sm"
+      [value]="products"
+      [paginator]="true"
+      [totalRecords]="countProducts"
+      [showCurrentPageReport]="true"
+      [lazy]="true"
+      [rows]="rows"
+      [first]="first"
+      [loading]="loading"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [expandedRowKeys]="expandedRows"
+      (onPage)="paginate($event)"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex flex-wrap justify-content-end gap-2">
+          <p-button
+            label="Expand All"
+            icon="pi pi-plus"
+            text
+            (onClick)="expandAll()"
+          />
+          <p-button
+            label="Collapse All"
+            icon="pi pi-minus"
+            text
+            (onClick)="collapseAll()"
+          />
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 5rem"></th>
+          <th>Código</th>
+          <th>Imagem</th>
+          <th>Descrição</th>
+          <th>Custo (R$)</th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product let-expanded="expanded">
+        <tr>
+          <td>
+            <p-button
+              type="button"
+              pRipple
+              [pRowToggler]="product"
+              [text]="true"
+              [rounded]="true"
+              [plain]="true"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            />
+          </td>
+          <td>{{ product.id }}</td>
+          <td>
+            @if (product.image) {
+              <img
+                [src]="product.image | bufferToImage"
+                alt="Imagem do produto"
+                width="55"
+                class="shadow-4 border-round-xs"
+              />
+            } @else {
+              <img
+                src="assets/images/no-image.jpg"
+                alt="Não foi cadastrada nenhuma imagem para este produto"
+                width="55"
+                class="shadow-4 border-round-md"
+              />
+            }
+          </td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.cost | currency: 'BRL' }}</td>
+          <td>
+            <p-button
+              icon="pi pi-pencil"
+              class="mr-2"
+              [rounded]="true"
+              (onClick)="editProduct($event, product)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              (onClick)="deleteProduct($event, product)"
+            />
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="rowexpansion" let-product>
+        <tr>
+          <td colspan="7">
+            <div class="p-3">
+              <p-table
+                [value]="product.shops"
+                dataKey="shopId"
+                styleClass="p-datatable-gridlines"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Código</th>
+                    <th>Loja</th>
+                    <th>Preço</th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-shop>
+                  <tr>
+                    <td>{{ shop.idShop }}</td>
+                    <td>{{ shop.description }}</td>
+                    <td>{{ shop.shopPrice | currency: 'BRL' }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="6">
+                      Não existe preços de lojas para este produto neste momento
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+          Total de produtos: {{ countProducts || 0 }}
+        </div>
+      </ng-template>
+    </p-table>
   </div>
-
-  <p-table
-    dataKey="id"
-    styleClass="p-datatable-sm"
-    [value]="products"
-    [paginator]="true"
-    [totalRecords]="countProducts"
-    [showCurrentPageReport]="true"
-    [lazy]="true"
-    [rows]="rows"
-    [first]="first"
-    [loading]="loading"
-    [tableStyle]="{ 'min-width': '60rem' }"
-    [expandedRowKeys]="expandedRows"
-    (onPage)="paginate($event)"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex flex-wrap justify-content-end gap-2">
-        <p-button
-          label="Expand All"
-          icon="pi pi-plus"
-          text
-          (onClick)="expandAll()"
-        />
-        <p-button
-          label="Collapse All"
-          icon="pi pi-minus"
-          text
-          (onClick)="collapseAll()"
-        />
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 5rem"></th>
-        <th>Código</th>
-        <th>Imagem</th>
-        <th>Descrição</th>
-        <th>Custo (R$)</th>
-        <th></th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-product let-expanded="expanded">
-      <tr>
-        <td>
-          <p-button
-            type="button"
-            pRipple
-            [pRowToggler]="product"
-            [text]="true"
-            [rounded]="true"
-            [plain]="true"
-            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-          />
-        </td>
-        <td>{{ product.id }}</td>
-        <td>
-          @if (product.image) {
-            <img
-              [src]="product.image | bufferToImage"
-              alt="Imagem do produto"
-              width="55"
-              class="shadow-4 border-round-xs"
-            />
-          } @else {
-            <img
-              src="assets/images/no-image.jpg"
-              alt="Não foi cadastrada nenhuma imagem para este produto"
-              width="55"
-              class="shadow-4 border-round-md"
-            />
-          }
-          <!-- <img
-            [src]="
-              'https://primefaces.org/cdn/primeng/images/demo/product/' +
-              product.image
-            "
-            [alt]="product.name"
-            width="50"
-            class="shadow-4"
-          /> -->
-        </td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.cost | currency: 'BRL' }}</td>
-        <td>
-          <p-button
-            icon="pi pi-pencil"
-            class="mr-2"
-            [rounded]="true"
-            (onClick)="editProduct(product)"
-          />
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            [rounded]="true"
-            (onClick)="deleteProduct(product)"
-          />
-        </td>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="rowexpansion" let-product>
-      <tr>
-        <td colspan="7">
-          <div class="p-3">
-            <p-table [value]="product.shops" dataKey="shopId" styleClass="p-datatable-gridlines">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Código</th>
-                  <th>Loja</th>
-                  <th>Preço</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-shop>
-                <tr>
-                  <td>{{ shop.idShop }}</td>
-                  <td>{{ shop.description }}</td>
-                  <td>{{ shop.shopPrice | currency: 'BRL' }}</td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="6">
-                    Não existe preços de lojas para este produto neste momento
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="summary">
-      <div class="flex align-items-center justify-content-between">
-        Total de produtos: {{ countProducts || 0 }}
-      </div>
-    </ng-template>
-  </p-table>
 </div>

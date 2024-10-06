@@ -5,6 +5,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { BufferToImagePipe } from '../../shared/pipes/buffer-to-image.pipe';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-list-products',
@@ -13,9 +15,11 @@ import { BufferToImagePipe } from '../../shared/pipes/buffer-to-image.pipe';
     RippleModule,
     TableModule,
     ButtonModule,
+    ConfirmDialogModule,
     CommonModule,
     BufferToImagePipe,
   ],
+  providers: [ConfirmationService],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.scss',
 })
@@ -32,12 +36,23 @@ export class ListProductsComponent {
   first: number = 0;
   expandedRows: { [key: string]: boolean } = {};
 
-  editProduct(product: Product) {
+  constructor(private confirmationService: ConfirmationService) {}
+
+  editProduct(event: Event, product: Product) {
     console.log('editting -> ', product);
   }
 
-  deleteProduct(product: Product) {
-    console.log('deleting -> ', product);
+  deleteProduct(event: Event, product: Product) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Tem certeza que deseja excluir o produto "${product.description}"?`,
+      header: 'Excluir produto',
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+    });
   }
 
   expandAll() {
