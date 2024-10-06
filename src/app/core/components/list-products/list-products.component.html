@@ -5,7 +5,7 @@
 
   <p-table
     dataKey="id"
-    styleClass="p-datatable-sm p-datatable-gridlines"
+    styleClass="p-datatable-sm"
     [value]="products"
     [paginator]="true"
     [totalRecords]="countProducts"
@@ -64,14 +64,14 @@
             <img
               [src]="product.image | bufferToImage"
               alt="Imagem do produto"
-              width="70"
+              width="55"
               class="shadow-4 border-round-xs"
             />
           } @else {
             <img
               src="assets/images/no-image.jpg"
-              alt="Imagem dizendo que não foi cadastrada nenhuma imagem para este produto"
-              width="70"
+              alt="Não foi cadastrada nenhuma imagem para este produto"
+              width="55"
               class="shadow-4 border-round-md"
             />
           }
@@ -92,15 +92,12 @@
             icon="pi pi-pencil"
             class="mr-2"
             [rounded]="true"
-            [outlined]="true"
-            severity="success"
             (onClick)="editProduct(product)"
           />
           <p-button
             icon="pi pi-trash"
             severity="danger"
             [rounded]="true"
-            [outlined]="true"
             (onClick)="deleteProduct(product)"
           />
         </td>
@@ -111,7 +108,7 @@
       <tr>
         <td colspan="7">
           <div class="p-3">
-            <p-table [value]="product.shops" dataKey="shopId">
+            <p-table [value]="product.shops" dataKey="shopId" styleClass="p-datatable-gridlines">
               <ng-template pTemplate="header">
                 <tr>
                   <th>Código</th>

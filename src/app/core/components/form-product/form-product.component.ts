@@ -14,7 +14,7 @@ import { IGetPaginateProducts } from '../../services/product/interfaces/get-pagi
   standalone: true,
   imports: [ReactiveFormsModule, InputTextModule, ButtonModule],
   templateUrl: './form-product.component.html',
-  styleUrl: './form-product.component.scss',
+  styleUrls: ['./form-product.component.scss'],
 })
 export class FormProductComponent {
   @Output() requestForm = new EventEmitter<
@@ -26,21 +26,32 @@ export class FormProductComponent {
     description: new FormControl(''),
     cost: new FormControl<number | null>(null, [
       Validators.required,
-      Validators.pattern(/^\d*(\.\d{0,3})?$/),
+      Validators.pattern(/^\d{1,13}(,\d{0,3})?$/),
     ]),
     shopPrice: new FormControl<number | null>(null, [
       Validators.required,
-      Validators.pattern(/^\d*(\.\d{0,3})?$/),
+      Validators.pattern(/^\d{1,13}(,\d{0,3})?$/),
     ]),
   });
 
   onSearch() {
-    const formValue = this.productSearchForm.value;
-    this.requestForm.emit({
-      code: formValue.code ?? undefined,
-      description: formValue.description ?? undefined,
-      cost: formValue.cost ?? undefined,
-      shopPrice: formValue.shopPrice ?? undefined,
+    if (this.productSearchForm.valid) {
+      const formValue = this.productSearchForm.value;
+      this.requestForm.emit({
+        code: formValue.code ?? undefined,
+        description: formValue.description ?? undefined,
+        cost: formValue.cost ?? undefined,
+        shopPrice: formValue.shopPrice ?? undefined,
+      });
+    }
+  }
+
+  resetFilters() {
+    this.productSearchForm.reset({
+      code: null,
+      description: '',
+      cost: null,
+      shopPrice: null,
     });
   }
 }

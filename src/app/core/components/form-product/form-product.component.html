@@ -32,7 +32,7 @@
           type="text"
           class="w-full"
           formControlName="cost"
-          mask="separator.!"
+          mask="9999999999999.999"
         />
       </div>
 
@@ -65,6 +65,7 @@
           class="p-element p-ripple p-button-raised p-button-secondary p-button p-component w-6 xl:w-8"
           icon="pi pi-times"
           iconPos="left"
+          (click)="resetFilters()"
         ></button>
       </div>
     </div>
