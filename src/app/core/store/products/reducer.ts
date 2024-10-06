@@ -1,7 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { Product } from '../../interfaces/product.interface';
-import { loadProducts, loadProductsFailure, loadProductsSuccess } from './action';
+import {
+  deleteProduct,
+  deleteProductError,
+  deleteProductSuccess,
+  loadProducts,
+  loadProductsFailure,
+  loadProductsSuccess,
+} from './action';
+import { IDeleteProductResponse } from '../../services/product/interfaces/product-delete.response.interface';
+import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
 
 export interface ProductState {
   products: Product[];
@@ -10,11 +19,23 @@ export interface ProductState {
   error: string | null;
 }
 
+export interface ProductRemoveState {
+  errorMessage: string | null;
+  success: boolean;
+  loading: boolean;
+}
+
 export const initialState: ProductState = {
   products: [],
   count: 0,
   loading: false,
   error: null,
+};
+
+export const initialStateDelete: ProductRemoveState = {
+  errorMessage: null,
+  success: false,
+  loading: false,
 };
 
 export const productReducer = createReducer(
@@ -28,11 +49,36 @@ export const productReducer = createReducer(
     ...state,
     loading: false,
     products,
-    count
+    count,
   })),
   on(loadProductsFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+  })),
+);
+
+export const productDelete = createReducer(
+  initialStateDelete,
+
+  on(deleteProduct, (state) => ({
+    ...state,
+    loading: true,
+    errorMessage: null,
+    success: false,
+  })),
+
+  on(deleteProductError, (state, response: IErrorDefaultResponse) => ({
+    ...state,
+    loading: false,
+    success: false,
+    errorMessage: response.message,
+  })),
+
+  on(deleteProductSuccess, (state, response: IDeleteProductResponse) => ({
+    ...state,
+    loading: false,
+    success: true,
+    errorMessage: null,
   })),
 );
