@@ -22,67 +22,8 @@ import { loadProducts } from '../../core/store/products/action';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  products: Product[] = [
-    {
-      id: 1,
-      description: 'Product description 1',
-      cost: 336.25,
-      image: null,
-      shops: [
-        {
-          idShop: 1,
-          shopPrice: 5.99,
-          description: 'Green Valley Market',
-        },
-      ],
-    },
-    {
-      id: 2,
-      description: 'Product description 2',
-      cost: 306.25,
-      image: null,
-      shops: [
-        {
-          idShop: 1,
-          shopPrice: 5.99,
-          description: 'Green Valley Market',
-        },
-      ],
-    },
-    {
-      id: 3,
-      description: 'Product description 3',
-      cost: 326.25,
-      image: null,
-      shops: [],
-    },
-    {
-      id: 4,
-      description: 'Product description 4',
-      cost: 236.25,
-      image: null,
-      shops: [
-        {
-          idShop: 1,
-          shopPrice: 5.99,
-          description: 'Green Valley Market',
-        },
-      ],
-    },
-    {
-      id: 5,
-      description: 'Product description 5',
-      cost: 536.25,
-      image: null,
-      shops: [
-        {
-          idShop: 1,
-          shopPrice: 5.99,
-          description: 'Green Valley Market',
-        },
-      ],
-    },
-  ];
+  private page!: number;
+  private pageSize!: number;
 
   products$: Observable<Product[]>;
   count$: Observable<number>;
@@ -97,10 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    const page = 1;
-    const pageSize = 5;
-
-    this.store.dispatch(loadProducts({ page, pageSize }));
+    this.setPaginator(1, 5);
     this.products$.subscribe((value) => console.log('valor => ', value));
     this.count$.subscribe((value) => console.log('counter -> ', value));
     this.loading$.subscribe((value) => console.log('loading', value));
@@ -108,8 +46,18 @@ export class HomeComponent implements OnInit {
 
   onPaginate(event: { page: number; pageSize: number }) {
     const { page, pageSize } = event;
-    console.log('aqui');
-    console.log(page, pageSize);
-    this.store.dispatch(loadProducts({ page, pageSize }));
+    this.setPaginator(page, pageSize);
+  }
+
+  setPaginator(page: number, pageSize: number) {
+    this.page = page;
+    this.pageSize = pageSize;
+    this.fetchData();
+  }
+
+  fetchData() {
+    this.store.dispatch(
+      loadProducts({ page: this.page, pageSize: this.pageSize }),
+    );
   }
 }
