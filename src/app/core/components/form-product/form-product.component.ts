@@ -17,4 +17,8 @@ export class FormProductComponent {
     cost: new FormControl(''),
     shopPrice: new FormControl(''),
   });
+
+  onSearch() {
+    console.log(this.productSearchForm.value);
+  }
 }

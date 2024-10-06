@@ -9,6 +9,11 @@ export const selectAllProducts = createSelector(
   (state: ProductState) => state.products,
 );
 
+export const selectCount = createSelector(
+  selectProductState,
+  (state: ProductState) => state.count,
+);
+
 export const selectLoading = createSelector(
   selectProductState,
   (state: ProductState) => state.loading,

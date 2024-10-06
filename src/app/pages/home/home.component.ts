@@ -9,6 +9,7 @@ import {
   selectAllProducts,
   selectLoading,
   selectError,
+  selectCount,
 } from '../../core/store/products/selector';
 import { Observable } from 'rxjs';
 import { loadProducts } from '../../core/store/products/action';
@@ -84,11 +85,13 @@ export class HomeComponent implements OnInit {
   ];
 
   products$: Observable<Product[]>;
+  count$: Observable<number>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
 
   constructor(private store: Store) {
     this.products$ = this.store.select(selectAllProducts);
+    this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectLoading);
     this.error$ = this.store.select(selectError);
   }
@@ -98,6 +101,15 @@ export class HomeComponent implements OnInit {
     const pageSize = 5;
 
     this.store.dispatch(loadProducts({ page, pageSize }));
-    this.products$.subscribe((value) => console.log("valor => ", value))
+    this.products$.subscribe((value) => console.log('valor => ', value));
+    this.count$.subscribe((value) => console.log('counter -> ', value));
+    this.loading$.subscribe((value) => console.log('loading', value));
+  }
+
+  onPaginate(event: { page: number; pageSize: number }) {
+    const { page, pageSize } = event;
+    console.log('aqui');
+    console.log(page, pageSize);
+    this.store.dispatch(loadProducts({ page, pageSize }));
   }
 }

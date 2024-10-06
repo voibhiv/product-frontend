@@ -1,4 +1,9 @@
 <div>
   <app-form-product />
-  <app-list-products [products]="(products$ | async) || []" />
+  <app-list-products
+    [products]="(products$ | async) || []"
+    [countProducts]="(count$ | async) || 0"
+    [loading]="(loading$ | async) || false"
+    (paginateEvent)="onPaginate($event)"
+  />
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../../interfaces/product.interface';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -21,7 +21,15 @@ import { BufferToImagePipe } from '../../shared/pipes/buffer-to-image.pipe';
 })
 export class ListProductsComponent {
   @Input() products!: Product[];
+  @Input() countProducts!: number;
+  @Input() loading!: boolean;
+  @Output() paginateEvent = new EventEmitter<{
+    page: number;
+    pageSize: number;
+  }>();
 
+  rows: number = 5;
+  first: number = 0;
   expandedRows: { [key: string]: boolean } = {};
 
   editProduct(product: Product) {
@@ -40,6 +48,14 @@ export class ListProductsComponent {
       },
       {} as { [key: string]: boolean },
     );
+  }
+
+  paginate(event: any) {
+    const page = event.first / event.rows + 1;
+    const pageSize = event.rows;
+    this.first = event.first;
+
+    this.paginateEvent.emit({ page, pageSize });
   }
 
   collapseAll() {

@@ -25,7 +25,12 @@ export class ProductEffects {
       ofType(loadProducts),
       mergeMap((request: IGetPaginateProducts) =>
         this.productService.getProductsPaginate(request).pipe(
-          map((response: IGetProductResponse) => loadProductsSuccess({ products: response.data })),
+          map((response: IGetProductResponse) =>
+            loadProductsSuccess({
+              products: response.data.products,
+              count: response.data.count,
+            }),
+          ),
           catchError((error) =>
             of(loadProductsFailure({ error: error.message })),
           ),

@@ -4,11 +4,19 @@
   </div>
 
   <p-table
-    [value]="products"
     dataKey="id"
     styleClass="p-datatable-sm p-datatable-gridlines"
+    [value]="products"
+    [paginator]="true"
+    [totalRecords]="countProducts"
+    [showCurrentPageReport]="true"
+    [lazy]="true"
+    [rows]="rows"
+    [first]="first"
+    [loading]="loading"
     [tableStyle]="{ 'min-width': '60rem' }"
     [expandedRowKeys]="expandedRows"
+    (onPage)="paginate($event)"
   >
     <ng-template pTemplate="caption">
       <div class="flex flex-wrap justify-content-end gap-2">
@@ -134,7 +142,7 @@
 
     <ng-template pTemplate="summary">
       <div class="flex align-items-center justify-content-between">
-        In total there are {{ products ? products.length : 0 }} products.
+        Total de produtos: {{ countProducts || 0 }}
       </div>
     </ng-template>
   </p-table>
