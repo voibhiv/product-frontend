@@ -1,5 +1,5 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ProductService } from '../../services/product/product.service';
 import {
@@ -11,16 +11,20 @@ import {
   loadProductsSuccess,
 } from './action';
 import { Injectable } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { ProductState } from './reducer';
 import { IGetPaginateProducts } from '../../services/product/interfaces/get-paginate-products.interface';
 import { IGetProductResponse } from '../../services/product/interfaces/product-get.response.interface';
 import { IDeleteProductResponse } from '../../services/product/interfaces/product-delete.response.interface';
 import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
+import { selectForm } from './selector';
 
 @Injectable()
 export class ProductEffects {
   constructor(
     private actions$: Actions,
     private productService: ProductService,
+    private store: Store<ProductState>,
   ) {}
 
   loadProducts$ = createEffect(() =>
@@ -32,6 +36,7 @@ export class ProductEffects {
             loadProductsSuccess({
               products: response.data.products,
               count: response.data.count,
+              request,
             }),
           ),
           catchError((error) =>
@@ -55,6 +60,11 @@ export class ProductEffects {
           ),
         ),
       ),
+      withLatestFrom(this.store.select(selectForm)),
+      tap(([action, form]) => {
+        this.store.dispatch(loadProducts(form));
+      }),
+      map(() => ({ type: '[Product] No Action' })),
     ),
   );
 }

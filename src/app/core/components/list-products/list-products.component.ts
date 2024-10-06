@@ -31,6 +31,7 @@ export class ListProductsComponent {
     page: number;
     pageSize: number;
   }>();
+  @Output() deleteEvent = new EventEmitter<number>();
 
   rows: number = 5;
   first: number = 0;
@@ -52,6 +53,9 @@ export class ListProductsComponent {
       rejectLabel: 'Não',
       acceptButtonStyleClass: 'p-button-danger p-button-text',
       rejectButtonStyleClass: 'p-button-text p-button-text',
+      accept: () => {
+        this.deleteEvent.emit(product.id);
+      },
     });
   }
 
@@ -71,6 +75,10 @@ export class ListProductsComponent {
     this.first = event.first;
 
     this.paginateEvent.emit({ page, pageSize });
+  }
+
+  reset() {
+    this.first = 0;
   }
 
   collapseAll() {

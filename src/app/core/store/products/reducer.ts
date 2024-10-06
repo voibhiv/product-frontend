@@ -11,10 +11,12 @@ import {
 } from './action';
 import { IDeleteProductResponse } from '../../services/product/interfaces/product-delete.response.interface';
 import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
+import { IGetPaginateProducts } from '../../services/product/interfaces/get-paginate-products.interface';
 
 export interface ProductState {
   products: Product[];
   count: number;
+  form: IGetPaginateProducts;
   loading: boolean;
   error: string | null;
 }
@@ -30,6 +32,10 @@ export const initialState: ProductState = {
   count: 0,
   loading: false,
   error: null,
+  form: {
+    page: 1,
+    pageSize: 5,
+  },
 };
 
 export const initialStateDelete: ProductRemoveState = {
@@ -45,11 +51,12 @@ export const productReducer = createReducer(
     loading: true,
     error: null,
   })),
-  on(loadProductsSuccess, (state, { products, count }) => ({
+  on(loadProductsSuccess, (state, { products, count, request }) => ({
     ...state,
     loading: false,
     products,
     count,
+    form: request,
   })),
   on(loadProductsFailure, (state, { error }) => ({
     ...state,

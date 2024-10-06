@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Product } from '../../core/interfaces/product.interface';
 
 import { ListProductsComponent } from '../../core/components/list-products/list-products.component';
@@ -10,9 +10,10 @@ import {
   selectLoading,
   selectError,
   selectCount,
+  selectForm,
 } from '../../core/store/products/selector';
 import { Observable } from 'rxjs';
-import { loadProducts } from '../../core/store/products/action';
+import { deleteProduct, loadProducts } from '../../core/store/products/action';
 import { IGetPaginateProducts } from '../../core/services/product/interfaces/get-paginate-products.interface';
 
 @Component({
@@ -23,54 +24,56 @@ import { IGetPaginateProducts } from '../../core/services/product/interfaces/get
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  private page!: number;
-  private pageSize!: number;
-
   products$: Observable<Product[]>;
   count$: Observable<number>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  formStore$: Observable<IGetPaginateProducts>;
+
+  private formRequest: IGetPaginateProducts = {
+    page: 1,
+    pageSize: 5,
+  };
+
+  @ViewChild(ListProductsComponent)
+  listProductsComponent!: ListProductsComponent;
 
   constructor(private store: Store) {
     this.products$ = this.store.select(selectAllProducts);
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectLoading);
     this.error$ = this.store.select(selectError);
+    this.formStore$ = this.store.select(selectForm);
   }
 
   ngOnInit() {
-    this.setPaginator(1, 5, true);
-    this.products$.subscribe((value) => console.log('valor => ', value));
-    this.count$.subscribe((value) => console.log('counter -> ', value));
-    this.loading$.subscribe((value) => console.log('loading', value));
+    this.fetchData(this.formRequest);
+    this.formStore$.subscribe((value) => (this.formRequest = value));
   }
 
   onPaginate(event: { page: number; pageSize: number }) {
     const { page, pageSize } = event;
-    this.setPaginator(page, pageSize, true);
+
+    this.fetchData({ ...this.formRequest, page, pageSize });
   }
 
   onSearch(search: Omit<IGetPaginateProducts, 'page' | 'pageSize'>) {
-    this.setPaginator(1, this.pageSize);
-
     const formRequest: IGetPaginateProducts = {
       ...search,
-      page: this.page,
-      pageSize: this.pageSize,
+      page: 1,
+      pageSize: 5,
     };
+
+    this.listProductsComponent.reset();
 
     this.fetchData(formRequest);
   }
 
-  setPaginator(page: number, pageSize: number, callRequest: boolean = false) {
-    this.page = page;
-    this.pageSize = pageSize;
-    if (callRequest) {
-      this.fetchData({ page, pageSize });
-    }
-  }
-
   fetchData(data: IGetPaginateProducts) {
     this.store.dispatch(loadProducts(data));
+  }
+
+  deleteProduct(id: number) {
+    this.store.dispatch(deleteProduct({ id }));
   }
 }

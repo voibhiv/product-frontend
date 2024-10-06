@@ -23,3 +23,8 @@ export const selectError = createSelector(
   selectProductState,
   (state: ProductState) => state.error,
 );
+
+export const selectForm = createSelector(
+  selectProductState,
+  (state: ProductState) => state.form,
+);

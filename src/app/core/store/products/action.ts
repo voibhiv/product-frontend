@@ -11,7 +11,7 @@ export const loadProducts = createAction(
 
 export const loadProductsSuccess = createAction(
   '[Product] Load Products Success',
-  props<{ products: Product[]; count: number }>(),
+  props<{ products: Product[]; count: number; request: IGetPaginateProducts }>(),
 );
 
 export const loadProductsFailure = createAction(
