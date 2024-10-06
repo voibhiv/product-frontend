@@ -11,17 +11,21 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProductsPaginate(request: IGetPaginateProducts): Observable<IGetProductResponse> {
-    const { page, pageSize, description } = request;
+  getProductsPaginate(
+    request: IGetPaginateProducts,
+  ): Observable<IGetProductResponse> {
+    const { page, pageSize, description, code, cost, shopPrice } = request;
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString());
 
-    if (description) {
-      params.set('description', description.toString());
-    }
+    if (code) params = params.set('id', code.toString());
+    if (description) params = params.set('description', description.toString());
+    if (cost) params = params.set('cost', cost.toString());
+    if (shopPrice) params = params.set('shopPrice', shopPrice.toString());
 
     console.log('chamando service');
+    console.log(params);
     return this.http.get<IGetProductResponse>(`${this.apiUrl}/product`, {
       params,
     });

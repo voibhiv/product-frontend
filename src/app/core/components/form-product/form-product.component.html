@@ -1,11 +1,11 @@
 <div class="card">
-
   <form [formGroup]="productSearchForm">
     <div class="formgrid grid">
       <div class="field col-6 xl:col-2">
         <label for="code" class="block">Código</label>
         <input
           pInputText
+          mask="000000"
           id="code"
           type="text"
           class="w-full"
@@ -32,6 +32,7 @@
           type="text"
           class="w-full"
           formControlName="cost"
+          mask="separator.!"
         />
       </div>
 
@@ -43,6 +44,7 @@
           type="text"
           class="w-full"
           formControlName="shopPrice"
+          mask="separator.!"
         />
       </div>
 
@@ -52,7 +54,7 @@
         <button
           pButton
           label="Buscar"
-          class="p-element p-ripple p-button-raised p-button-priomary p-button p-component w-6 xl:w-6"
+          class="p-element p-ripple p-button-raised p-button-primary p-button p-component w-6 xl:w-6"
           icon="pi pi-search"
           iconPos="left"
           (click)="onSearch()"

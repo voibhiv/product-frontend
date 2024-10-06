@@ -1,5 +1,5 @@
 <div>
-  <app-form-product />
+  <app-form-product (requestForm)="onSearch($event)" />
   <app-list-products
     [products]="(products$ | async) || []"
     [countProducts]="(count$ | async) || 0"

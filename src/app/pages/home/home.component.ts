@@ -13,6 +13,7 @@ import {
 } from '../../core/store/products/selector';
 import { Observable } from 'rxjs';
 import { loadProducts } from '../../core/store/products/action';
+import { IGetPaginateProducts } from '../../core/services/product/interfaces/get-paginate-products.interface';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setPaginator(1, 5);
+    this.setPaginator(1, 5, true);
     this.products$.subscribe((value) => console.log('valor => ', value));
     this.count$.subscribe((value) => console.log('counter -> ', value));
     this.loading$.subscribe((value) => console.log('loading', value));
@@ -46,18 +47,30 @@ export class HomeComponent implements OnInit {
 
   onPaginate(event: { page: number; pageSize: number }) {
     const { page, pageSize } = event;
-    this.setPaginator(page, pageSize);
+    this.setPaginator(page, pageSize, true);
   }
 
-  setPaginator(page: number, pageSize: number) {
+  onSearch(search: Omit<IGetPaginateProducts, 'page' | 'pageSize'>) {
+    this.setPaginator(1, this.pageSize);
+
+    const formRequest: IGetPaginateProducts = {
+      ...search,
+      page: this.page,
+      pageSize: this.pageSize,
+    };
+
+    this.fetchData(formRequest);
+  }
+
+  setPaginator(page: number, pageSize: number, callRequest: boolean = false) {
     this.page = page;
     this.pageSize = pageSize;
-    this.fetchData();
+    if (callRequest) {
+      this.fetchData({ page, pageSize });
+    }
   }
 
-  fetchData() {
-    this.store.dispatch(
-      loadProducts({ page: this.page, pageSize: this.pageSize }),
-    );
+  fetchData(data: IGetPaginateProducts) {
+    this.store.dispatch(loadProducts(data));
   }
 }
