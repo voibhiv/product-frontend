@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToolbarModule } from 'primeng/toolbar';
 import { filter } from 'rxjs';
+import { NavigationProductRegister } from '../../interfaces/navigation-product-register.interface';
 
 @Component({
   selector: 'app-header-info',
@@ -15,6 +16,8 @@ import { filter } from 'rxjs';
 export class HeaderInfoComponent implements OnInit {
   title: string = 'Cadastro de Produtos';
   showHeader: boolean = false;
+  hasProduct: boolean = false;
+  isRegister: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -22,21 +25,28 @@ export class HeaderInfoComponent implements OnInit {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.updateTitleBasedOnRoute();
+        this.updatePropertiesBasedOnRoute();
       });
   }
 
-  updateTitleBasedOnRoute() {
+  updatePropertiesBasedOnRoute() {
     const currentRoute = this.router.url;
+    const currentState = this.router.lastSuccessfulNavigation?.extras
+      .state as NavigationProductRegister;
+
+    this.hasProduct = !!(currentState?.product ?? null);
 
     if (currentRoute.includes('produto/cadastro')) {
       this.title = 'Cadastro de Produto';
       this.showHeader = true;
+      this.isRegister = true;
     } else if (currentRoute.includes('produto')) {
       this.title = 'Consulta de Produtos';
       this.showHeader = true;
+      this.isRegister = false;
     } else {
       this.showHeader = false;
+      this.isRegister = false;
     }
   }
 

@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from '../../core/interfaces/product.interface';
 import { NavigationProductRegister } from '../../core/interfaces/navigation-product-register.interface';
-import { BehaviorSubject } from 'rxjs';
+import { FormProductRegisterComponent } from '../../core/components/form-product-register/form-product-register.component';
+import { ListShopsComponent } from '../../core/components/list-shops/list-shops.component';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [],
+  imports: [FormProductRegisterComponent, ListShopsComponent],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })

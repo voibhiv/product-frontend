@@ -2,13 +2,39 @@
   <header class="header-info-content">
     <p-toolbar class="toolbar-content">
       <div class="p-toolbar-group-start">
-        <p-button
-          icon="pi pi-plus"
-          class="mr-2"
-          [rounded]="true"
-          [outlined]="true"
-          (click)="redirectToRegister()"
-        />
+        @if (isRegister && hasProduct) {
+          <p-button
+            icon="pi pi-save"
+            class="mr-2"
+            [rounded]="true"
+            [raised]="true"
+            severity="success"
+          />
+
+          <p-button
+            icon="pi pi-trash"
+            class="mr-2"
+            [rounded]="true"
+            [raised]="true"
+            severity="danger"
+          />
+        } @else if (isRegister && !hasProduct) {
+          <p-button
+            icon="pi pi-save"
+            class="mr-2"
+            [rounded]="true"
+            [raised]="true"
+            severity="success"
+          />
+        } @else {
+          <p-button
+            icon="pi pi-plus"
+            class="mr-2"
+            [rounded]="true"
+            [raised]="true"
+            (click)="redirectToRegister()"
+          />
+        }
       </div>
       <div class="p-toolbar-group-center">
         <h3>{{ title }}</h3>

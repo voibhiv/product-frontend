@@ -1,0 +1,27 @@
+<div class="card">
+  <p-table
+    dataKey="idShop"
+    styleClass="p-datatable-md p-datatable-gridlines"
+    [value]="product?.shops ?? []"
+    [lazy]="true"
+    [tableStyle]="{ 'min-width': '60rem' }"
+  >
+    <ng-template pTemplate="caption"> </ng-template>
+    <ng-template pTemplate="header">
+      <tr class="h-4rem header-table">
+        <th class="w-6">Loja</th>
+        <th class="w-6">Preço de Venda</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-shop>
+      <tr>
+        <td>
+          {{ shop.description }}
+        </td>
+        <td>
+          {{ shop.shopPrice | currency: 'BRL' }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

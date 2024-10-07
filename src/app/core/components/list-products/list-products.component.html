@@ -7,7 +7,7 @@
 
     <p-table
       dataKey="id"
-      styleClass="p-datatable-sm"
+      styleClass="p-datatable-sm p-datatable-gridlines"
       [value]="products"
       [paginator]="true"
       [totalRecords]="countProducts"
@@ -16,7 +16,6 @@
       [rows]="rows"
       [first]="first"
       [loading]="loading"
-      [first]="first"
       [tableStyle]="{ 'min-width': '60rem', 'min-height': '400px' }"
       [expandedRowKeys]="expandedRows"
       (onPage)="paginate($event)"
@@ -38,7 +37,7 @@
         </div>
       </ng-template>
       <ng-template pTemplate="header">
-        <tr>
+        <tr class="h-4rem">
           <th style="width: 5rem"></th>
           <th>Código</th>
           <th>Imagem</th>
