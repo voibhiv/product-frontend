@@ -28,7 +28,7 @@
         </ng-template>
       </p-fileUpload>
     </app-form-product-register>
-    <app-list-shops [product]="product" />
+    <app-list-shops [product]="product" (addPriceEmitter)="openDialogAddPrice()" />
   </div>
   <div class="col-12 hidden xl:col-3 xl:block">
     <div class="card">

@@ -7,7 +7,7 @@
     [tableStyle]="{ 'min-width': '60rem' }"
   >
     <ng-template pTemplate="caption">
-      <p-button icon="pi pi-plus" [rounded]="true" [raised]="true" />
+      <p-button icon="pi pi-plus" [rounded]="true" [raised]="true" (click)="openDialogEmitter()" />
     </ng-template>
     <ng-template pTemplate="header">
       <tr class="h-4rem header-table">

@@ -7,7 +7,13 @@ import { ListShopsComponent } from '../../core/components/list-shops/list-shops.
 import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
 import { BufferToImagePipe } from '../../core/shared/pipes/buffer-to-image.pipe';
-import { buffer } from 'stream/consumers';
+import {
+  DialogService,
+  DynamicDialogModule,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
+import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-shops.component';
+import { Shop } from '../../core/interfaces/shops.interface';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,13 +24,19 @@ import { buffer } from 'stream/consumers';
     FileUploadModule,
     CommonModule,
     BufferToImagePipe,
+    DynamicDialogModule,
   ],
+  providers: [DialogService],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public dialogService: DialogService,
+  ) {}
   uploadedFiles: any[] = [];
+  ref: DynamicDialogRef | undefined;
 
   public product!: Product | null;
 
@@ -73,5 +85,28 @@ export class ProductDetailComponent implements OnInit {
 
   onClear() {
     this.uploadedFiles = [];
+  }
+
+  openDialogAddPrice() {
+    this.ref = this.dialogService.open(DialogShopsComponent, {
+      header: 'Inclusão de Preço',
+      width: '50vw',
+      modal: true,
+      data: {
+        ...this.product?.shops,
+      },
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw',
+      },
+    });
+
+    this.ref.onClose.subscribe((shop: Shop) => {
+      if (shop) {
+        console.log('tem produto');
+      } else {
+        console.log('nao tem produto');
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Shop } from '../../interfaces/shops.interface';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
@@ -15,4 +15,9 @@ import { Product } from '../../interfaces/product.interface';
 })
 export class ListShopsComponent {
   @Input() product!: Product | null;
+  @Output() addPriceEmitter = new EventEmitter();
+
+  openDialogEmitter() {
+    this.addPriceEmitter.emit();
+  }
 }
