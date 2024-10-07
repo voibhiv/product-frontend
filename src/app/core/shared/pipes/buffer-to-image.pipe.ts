@@ -6,10 +6,13 @@ import { Buffer } from 'buffer';
   standalone: true,
 })
 export class BufferToImagePipe implements PipeTransform {
-  transform(value: Buffer): string {
-    const buffer = Buffer.from(value);
+  transform(value: Buffer | undefined | null): string {
+    if (!value) {
+      return '';
+    }
 
+    const buffer = Buffer.from(value);
     const base64 = buffer.toString('base64');
-    return `data:image/png;base64,${base64}`; 
+    return `data:image/png;base64,${base64}`;
   }
 }
