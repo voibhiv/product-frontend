@@ -1,7 +1,7 @@
 <div class="card">
   <form [formGroup]="productSaveForm">
     <div class="formgrid grid">
-      <div class="field col-6 xl:col-3">
+      <div class="field col-6 xl:col-4">
         <label for="code" class="block">Código</label>
         <input
           pInputText
@@ -12,7 +12,7 @@
         />
       </div>
 
-      <div class="field col-6 xl:col-3">
+      <div class="field col-6 xl:col-4">
         <label for="description" class="block">Descrição</label>
         <input
           pInputText
@@ -23,7 +23,7 @@
         />
       </div>
 
-      <div class="field col-12 xl:col-3">
+      <div class="field col-12 xl:col-4">
         <label for="cost" class="block">Custo</label>
         <input
           pInputText
@@ -34,7 +34,7 @@
         />
       </div>
 
-      <div class="field col-12 xl:col-3">
+      <div class="field block col-12 xl:hidden">
         <label for="image" class="block">Imagem</label>
         <p-fileUpload
           id="image"
