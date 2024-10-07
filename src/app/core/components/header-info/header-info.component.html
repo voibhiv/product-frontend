@@ -1,0 +1,19 @@
+@if (showHeader) {
+  <header class="header-info-content">
+    <p-toolbar class="toolbar-content">
+      <div class="p-toolbar-group-start">
+        <p-button
+          icon="pi pi-plus"
+          class="mr-2"
+          [rounded]="true"
+          [outlined]="true"
+          (click)="redirectToRegister()"
+        />
+      </div>
+      <div class="p-toolbar-group-center">
+        <h3>{{ title }}</h3>
+      </div>
+      <div class="p-toolbar-group-end"></div>
+    </p-toolbar>
+  </header>
+}

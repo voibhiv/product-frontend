@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Buffer } from 'buffer'; // Usar o Buffer de Node.js
+import { Buffer } from 'buffer';
 
 @Pipe({
   name: 'bufferToImage',

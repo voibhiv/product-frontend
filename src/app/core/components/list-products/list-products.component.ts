@@ -32,6 +32,7 @@ export class ListProductsComponent {
     pageSize: number;
   }>();
   @Output() deleteEvent = new EventEmitter<number>();
+  @Output() editEvent = new EventEmitter<Product>();
 
   rows: number = 5;
   first: number = 0;
@@ -39,8 +40,8 @@ export class ListProductsComponent {
 
   constructor(private confirmationService: ConfirmationService) {}
 
-  editProduct(event: Event, product: Product) {
-    console.log('editting -> ', product);
+  editProduct(product: Product) {
+    this.editEvent.emit(product);
   }
 
   deleteProduct(event: Event, product: Product) {

@@ -15,6 +15,7 @@ import {
 import { Observable } from 'rxjs';
 import { deleteProduct, loadProducts } from '../../core/store/products/action';
 import { IGetPaginateProducts } from '../../core/services/product/interfaces/get-paginate-products.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +39,10 @@ export class HomeComponent implements OnInit {
   @ViewChild(ListProductsComponent)
   listProductsComponent!: ListProductsComponent;
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {
     this.products$ = this.store.select(selectAllProducts);
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectLoading);
@@ -75,5 +79,11 @@ export class HomeComponent implements OnInit {
 
   deleteProduct(id: number) {
     this.store.dispatch(deleteProduct({ id }));
+  }
+
+  editProduct(product: Product) {
+    this.router.navigate(['/produto/cadastro'], {
+      state: { product },
+    });
   }
 }

@@ -8,7 +8,7 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { IGetPaginateProducts } from '../../services/product/interfaces/get-paginate-products.interface';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'; // Import NgxMaskDirective
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-form-product',

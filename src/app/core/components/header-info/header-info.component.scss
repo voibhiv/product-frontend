@@ -1,0 +1,17 @@
+.header-info-content {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+
+  ::ng-deep .p-toolbar {
+    border-right: none !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-top: none !important;
+    background-color: var(--secondary);
+    padding: 0.55rem 1.45rem;
+    box-shadow: 0px 0px 9px -4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #dcdddd;
+  }
+}
