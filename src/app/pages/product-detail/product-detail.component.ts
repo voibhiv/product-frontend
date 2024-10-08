@@ -92,10 +92,22 @@ export class ProductDetailComponent implements OnInit {
 
   onSelect(event: any) {
     this.onClear();
-    console.log(event);
     const file = event.files[0];
-    const objectURL = URL.createObjectURL(file);
-    this.uploadedFiles.push({ ...file, objectURL });
+
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    if (fileExtension === 'jpg' || fileExtension === 'png') {
+      const objectURL = URL.createObjectURL(file);
+      this.uploadedFiles.push({ ...file, objectURL });
+    } else {
+      this.showInvalidFileMessage(file.name);
+      this.onClear();
+    }
+  }
+
+  showInvalidFileMessage(fileName: string) {
+    console.warn(
+      `${fileName} não é um formato válido. tente novamente com .jpg ou .png.`,
+    );
   }
 
   setImageDefault(imageBuffer: Buffer) {
