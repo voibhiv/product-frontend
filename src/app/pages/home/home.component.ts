@@ -16,11 +16,22 @@ import { Observable } from 'rxjs';
 import { deleteProduct, loadProducts } from '../../core/store/products/action';
 import { IGetPaginateProducts } from '../../core/services/product/interfaces/get-paginate-products.interface';
 import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ListProductsComponent, FormProductComponent],
+  imports: [
+    CommonModule,
+    ListProductsComponent,
+    FormProductComponent,
+    ToastModule,
+    RippleModule,
+    ButtonModule,
+  ],
+  providers: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

@@ -7,6 +7,7 @@ import { IGetProductResponse } from './interfaces/product-get.response.interface
 import { IDeleteProductResponse } from './interfaces/product-delete.response.interface';
 import { Product } from '../../interfaces/product.interface';
 import { ICreateProduct } from './interfaces/create-product.request';
+import { ISaveProductResponse } from './interfaces/product-save.response.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -38,7 +39,7 @@ export class ProductService {
     );
   }
 
-  createProduct(request: ICreateProduct) {
+  createProduct(request: ICreateProduct): Observable<ISaveProductResponse> {
     const formData = new FormData();
 
     if (request.file) {
@@ -57,7 +58,7 @@ export class ProductService {
       formData.append('shops', JSON.stringify(request.shops));
     }
 
-    return this.http.post<IGetProductResponse>(
+    return this.http.post<ISaveProductResponse>(
       `${this.apiUrl}/product/`,
       formData,
     );

@@ -16,6 +16,7 @@ import { IDeleteProductResponse } from '../../services/product/interfaces/produc
 import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
 import { IGetPaginateProducts } from '../../services/product/interfaces/get-paginate-products.interface';
 import { IGetProductResponse } from '../../services/product/interfaces/product-get.response.interface';
+import { ISaveProductResponse } from '../../services/product/interfaces/product-save.response.interface';
 
 export interface ProductState {
   products: Product[];
@@ -32,6 +33,7 @@ export interface ProductRemoveState {
 }
 
 export interface ProductCreateState {
+  product: Product;
   errorMessage: string | null;
   success: boolean;
   loading: boolean;
@@ -55,6 +57,7 @@ export const initialStateDelete: ProductRemoveState = {
 };
 
 export const initialStateCreate: ProductCreateState = {
+  product: {} as Product,
   errorMessage: null,
   success: false,
   loading: false,
@@ -123,10 +126,11 @@ export const productCreateReducer = createReducer(
     errorMessage: response.message,
   })),
 
-  on(createProductSuccess, (state, response: IGetProductResponse) => ({
+  on(createProductSuccess, (state, response: ISaveProductResponse) => ({
     ...state,
     loading: false,
     success: true,
+    product: response.data.product,
     errorMessage: null,
   })),
 );

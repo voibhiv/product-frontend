@@ -5,6 +5,7 @@ import { IDeleteProductResponse } from '../../services/product/interfaces/produc
 import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
 import { ICreateProduct } from '../../services/product/interfaces/create-product.request';
 import { IGetProductResponse } from '../../services/product/interfaces/product-get.response.interface';
+import { ISaveProductResponse } from '../../services/product/interfaces/product-save.response.interface';
 
 export const loadProducts = createAction(
   '[Product] Load Products',
@@ -47,7 +48,7 @@ export const createProduct = createAction(
 
 export const createProductSuccess = createAction(
   '[Product] Create Product Success',
-  props<IGetProductResponse>(),
+  props<ISaveProductResponse>(),
 );
 
 export const createProductError = createAction(

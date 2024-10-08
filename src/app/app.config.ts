@@ -11,7 +11,10 @@ import { provideHttpClient } from '@angular/common/http';
 // import { productsReducer } from './core/stores/products/reducers';
 // import { ProductEffect } from './core/stores/products/effects';
 import { provideEffects } from '@ngrx/effects';
-import { productReducer } from './core/store/products/reducer';
+import {
+  productCreateReducer,
+  productReducer,
+} from './core/store/products/reducer';
 import { ProductEffects } from './core/store/products/effects';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,7 +27,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideStore({ products: productReducer, shops: shopReducer }),
+    provideStore({
+      products: productReducer,
+      shops: shopReducer,
+      product: productCreateReducer,
+    }),
     provideEffects([ProductEffects, ShopEffects]),
     provideEnvironmentNgxMask(),
     importProvidersFrom([BrowserModule, BrowserAnimationsModule]),

@@ -21,6 +21,7 @@ import { IGetProductResponse } from '../../services/product/interfaces/product-g
 import { IDeleteProductResponse } from '../../services/product/interfaces/product-delete.response.interface';
 import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
 import { selectForm } from './selector';
+import { ISaveProductResponse } from '../../services/product/interfaces/product-save.response.interface';
 
 @Injectable()
 export class ProductEffects {
@@ -76,7 +77,7 @@ export class ProductEffects {
       ofType(createProduct),
       mergeMap((request) =>
         this.productService.createProduct(request).pipe(
-          map((response: IGetProductResponse) =>
+          map((response: ISaveProductResponse) =>
             createProductSuccess(response),
           ),
           catchError((error: IErrorDefaultResponse) =>

@@ -1,9 +1,9 @@
 import { Product } from '../../../interfaces/product.interface';
 
-export interface IGetProductResponse {
+export interface ISaveProductResponse {
   statusCode: number;
   data: {
-    products: Product;
+    product: Product;
     count: number;
   };
   message: string;

@@ -16,7 +16,7 @@ import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-
 import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
 import { Shop } from '../../core/interfaces/shops.interface';
 import { HeaderActionService } from '../../core/services/header/header.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
@@ -253,6 +253,7 @@ export class ProductDetailComponent implements OnInit {
       }
 
       this.store.dispatch(createProduct(requestToCreateProduct));
+      this.router.navigate(['/produto']);
     }
   }
 }
