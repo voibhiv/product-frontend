@@ -35,4 +35,9 @@ export class ProductService {
       `${this.apiUrl}/product/${id}`,
     );
   }
+
+  createProduct() {
+    
+  }
+
 }

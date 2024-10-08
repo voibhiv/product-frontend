@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from '../../core/interfaces/product.interface';
 import { NavigationProductRegister } from '../../core/interfaces/navigation-product-register.interface';
@@ -15,6 +15,8 @@ import {
 import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-shops.component';
 import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
 import { Shop } from '../../core/interfaces/shops.interface';
+import { HeaderActionService } from '../../core/services/header/header.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-detail',
@@ -33,17 +35,34 @@ import { Shop } from '../../core/interfaces/shops.interface';
   styleUrl: './product-detail.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
+  @ViewChild(FormProductRegisterComponent)
+  formProductRegisterComponent!: FormProductRegisterComponent;
   uploadedFiles: any[] = [];
   ref: DynamicDialogRef | undefined;
   openModal: boolean = false;
   public product!: Product | null;
+  private actionSubscription: Subscription | undefined;
 
   constructor(
     private router: Router,
     public dialogService: DialogService,
+    private headerActionService: HeaderActionService,
   ) {}
 
   ngOnInit(): void {
+    this.actionSubscription = this.headerActionService.action$.subscribe(
+      (action) => {
+        switch (action) {
+          case 'save':
+            this.createProduct();
+            break;
+          case 'delete':
+            console.log('edited');
+            break;
+        }
+      },
+    );
+
     const currentState = this.router.lastSuccessfulNavigation?.extras
       .state as NavigationProductRegister;
 
@@ -59,9 +78,9 @@ export class ProductDetailComponent implements OnInit {
       } as Product;
       return;
     }
-  
+
     this.product = JSON.parse(JSON.stringify(product));
-  
+
     if (this.product?.image) {
       this.setImageDefault(this.product.image);
     }
@@ -73,6 +92,7 @@ export class ProductDetailComponent implements OnInit {
 
   onSelect(event: any) {
     this.onClear();
+    console.log(event);
     const file = event.files[0];
     const objectURL = URL.createObjectURL(file);
     this.uploadedFiles.push({ ...file, objectURL });
@@ -120,5 +140,22 @@ export class ProductDetailComponent implements OnInit {
       this.addShopToProduct(data);
     }
     this.openModal = false;
+  }
+
+  ngOnDestroy(): void {
+    if (this.actionSubscription) {
+      this.actionSubscription.unsubscribe();
+    }
+  }
+
+  createProduct() {
+    if (this.formProductRegisterComponent) {
+      const formGroup = this.formProductRegisterComponent.getFormGroup();
+      if (formGroup.valid) {
+        console.log('Form values:', formGroup.value);
+      } else {
+        console.log('Formulário inválido');
+      }
+    }
   }
 }

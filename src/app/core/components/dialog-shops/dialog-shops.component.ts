@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectAllShops } from '../../store/shops/selector';
 import { map, Observable } from 'rxjs';
@@ -32,7 +39,7 @@ import { IDialogShop } from '../../interfaces/dialog-shop.interface';
   templateUrl: './dialog-shops.component.html',
   styleUrl: './dialog-shops.component.scss',
 })
-export class DialogShopsComponent implements OnInit {
+export class DialogShopsComponent implements OnChanges {
   isSaved: boolean = false;
   shops$: Observable<IShopList[]>;
   selectedShop?: IShopList;
@@ -61,8 +68,15 @@ export class DialogShopsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.shops$.subscribe((value) => console.log('agora -> ', value));
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['display'] && changes['display'].currentValue) {
+      this.initializeForm();
+    }
+  }
+
+  initializeForm() {
+    this.dialogForm.reset();
+    this.selectedShop = {} as IShopList;
     this.isSaved = false;
   }
 
@@ -76,7 +90,6 @@ export class DialogShopsComponent implements OnInit {
     this.isSaved = true;
     if (this.dialogForm.valid) {
       const formValue = this.dialogForm.value;
-      console.log("aqui => ", formValue);
       this.closedModal.emit(formValue as IDialogShop);
     }
   }

@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToolbarModule } from 'primeng/toolbar';
 import { filter } from 'rxjs';
 import { NavigationProductRegister } from '../../interfaces/navigation-product-register.interface';
+import { HeaderActionService } from '../../services/header/header.service';
 
 @Component({
   selector: 'app-header-info',
@@ -19,7 +20,10 @@ export class HeaderInfoComponent implements OnInit {
   hasProduct: boolean = false;
   isRegister: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private headerActionService: HeaderActionService,
+  ) {}
 
   ngOnInit() {
     this.router.events
@@ -55,4 +59,13 @@ export class HeaderInfoComponent implements OnInit {
       state: { product: null },
     });
   }
+
+  onSave() {
+    this.headerActionService.emitAction('save');
+  }
+
+  onDelete() {
+    this.headerActionService.emitAction('delete');
+  }
+
 }

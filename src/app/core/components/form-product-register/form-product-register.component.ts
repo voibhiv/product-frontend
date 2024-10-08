@@ -42,8 +42,8 @@ export class FormProductRegisterComponent implements OnInit {
     this.patchFormValues();
   }
 
-  onUpload(event: UploadEvent) {
-    console.log('event upload', event);
+  getFormGroup() {
+    return this.productSaveForm;
   }
 
   patchFormValues() {
