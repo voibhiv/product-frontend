@@ -10,6 +10,19 @@
           class="w-full"
           formControlName="code"
         />
+        <div
+          *ngIf="
+            productSearchForm.get('code')?.invalid &&
+            productSearchForm.get('code')?.touched
+          "
+        >
+          <small
+            class="p-error"
+            *ngIf="productSearchForm.get('code')?.errors?.['pattern']"
+          >
+            O código deve ser um número válido.
+          </small>
+        </div>
       </div>
 
       <div class="field col-6 xl:col-4">
@@ -21,6 +34,19 @@
           class="w-full"
           formControlName="description"
         />
+        <div
+          *ngIf="
+            productSearchForm.get('description')?.invalid &&
+            productSearchForm.get('description')?.touched
+          "
+        >
+          <small
+            class="p-error"
+            *ngIf="productSearchForm.get('description')?.errors?.['maxlength']"
+          >
+            A descrição não pode ter mais de 60 caracteres.
+          </small>
+        </div>
       </div>
 
       <div class="field col-6 xl:col-2">
@@ -28,10 +54,29 @@
         <input
           pInputText
           id="cost"
-          type="number"
+          type="text"
           class="w-full"
           formControlName="cost"
+          ngxMask
+          mask="separator.3"
+          prefix="R$ "
+          thousandSeparator=","
+          decimalMarker="."
         />
+        <div
+          *ngIf="
+            productSearchForm.get('cost')?.invalid &&
+            productSearchForm.get('cost')?.touched
+          "
+        >
+          <small
+            class="p-error"
+            *ngIf="productSearchForm.get('cost')?.errors?.['pattern']"
+          >
+            O custo deve ser um número válido (máximo 13 dígitos inteiros e
+            até 3 casas decimais).
+          </small>
+        </div>
       </div>
 
       <div class="field col-6 xl:col-2">
@@ -39,10 +84,29 @@
         <input
           pInputText
           id="shopPrice"
-          type="number"
+          type="text"
           class="w-full"
           formControlName="shopPrice"
+          ngxMask
+          mask="separator.3"
+          prefix="R$ "
+          thousandSeparator=","
+          decimalMarker="."
         />
+        <div
+          *ngIf="
+            productSearchForm.get('shopPrice')?.invalid &&
+            productSearchForm.get('shopPrice')?.touched
+          "
+        >
+          <small
+            class="p-error"
+            *ngIf="productSearchForm.get('shopPrice')?.errors?.['pattern']"
+          >
+            O preço deve ser um número válido (máximo 13 dígitos inteiros e
+            até 3 casas decimais).
+          </small>
+        </div>
       </div>
 
       <div

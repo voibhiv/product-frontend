@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { IGetPaginateProducts } from '../../services/product/interfaces/get-paginate-products.interface';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-form-product',
@@ -18,6 +19,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     InputTextModule,
     ButtonModule,
     NgxMaskDirective,
+    CommonModule
   ],
   templateUrl: './form-product.component.html',
   styleUrls: ['./form-product.component.scss'],
@@ -30,7 +32,9 @@ export class FormProductComponent {
 
   productSearchForm = new FormGroup({
     code: new FormControl<number | null>(null, [Validators.pattern(/^\d+$/)]),
-    description: new FormControl(''),
+    description: new FormControl('', [
+      Validators.maxLength(60),
+    ]),
     cost: new FormControl<number | null>(null, [
       Validators.pattern(/^(?!.*[a-zA-Z])(?:\d{1,13}|\d{1,12}(?:\.\d{1,3})?)$/),
     ]),

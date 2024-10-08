@@ -32,9 +32,12 @@ export class FormProductRegisterComponent implements OnInit {
     code: new FormControl<number | null>({ value: null, disabled: true }, [
       Validators.pattern(/^\d+$/),
     ]),
-    description: new FormControl(''),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(60),
+    ]),
     cost: new FormControl<number | null>(null, [
-      Validators.pattern(/^(?!.*[a-zA-Z])(?:\d{1,13}|\d{1,12}(?:\.\d{1,3})?)$/),
+      Validators.pattern(/^\d{1,13}(\.\d{1,3})?$/),
     ]),
   });
 

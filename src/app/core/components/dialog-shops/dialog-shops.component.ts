@@ -12,10 +12,12 @@ import { map, Observable } from 'rxjs';
 import { IShopList } from '../../interfaces/shop-list.interface';
 import { DropdownModule } from 'primeng/dropdown';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -23,6 +25,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { IDialogShop } from '../../interfaces/dialog-shop.interface';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-dialog-shops',
@@ -35,6 +38,7 @@ import { IDialogShop } from '../../interfaces/dialog-shop.interface';
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
+    NgxMaskDirective
   ],
   templateUrl: './dialog-shops.component.html',
   styleUrl: './dialog-shops.component.scss',
@@ -47,15 +51,20 @@ export class DialogShopsComponent implements OnChanges {
   @Output() closedModal = new EventEmitter<null | IDialogShop>();
 
   dialogForm = new FormGroup({
-    selectedShop: new FormControl<IShopList>(
-      {} as IShopList,
+    selectedShop: new FormControl<IShopList | null>(null, [
       Validators.required,
-    ),
+      this.validateSelectedShop,
+    ]),
     shopPrice: new FormControl<number | null>(null, [
       Validators.required,
-      Validators.pattern(/^(?!.*[a-zA-Z])(?:\d{1,13}|\d{1,12}(?:\.\d{1,3})?)$/),
+      Validators.pattern(/^\d{1,13}(\.\d{1,3})?$/),
     ]),
   });
+
+  validateSelectedShop(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    return value ? null : { emptyShop: true };
+  }
 
   constructor(private store: Store) {
     this.shops$ = this.store.select(selectAllShops).pipe(
@@ -87,6 +96,11 @@ export class DialogShopsComponent implements OnChanges {
   }
 
   onSave() {
+    if (this.dialogForm.invalid) {
+      this.dialogForm.markAllAsTouched();
+      return;
+    }
+
     this.isSaved = true;
     if (this.dialogForm.valid) {
       const formValue = this.dialogForm.value;

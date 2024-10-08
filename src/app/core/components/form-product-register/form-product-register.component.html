@@ -13,14 +13,34 @@
       </div>
 
       <div class="field col-6 xl:col-4">
-        <label for="description" class="block">Descrição</label>
+        <label for="description" class="block">Descrição *</label>
         <input
           pInputText
           id="description"
           type="text"
           class="w-full"
           formControlName="description"
+          mask="S*"
         />
+        <div
+          *ngIf="
+            productSaveForm.get('description')?.invalid &&
+            productSaveForm.get('description')?.touched
+          "
+        >
+          <small
+            class="p-error"
+            *ngIf="productSaveForm.get('description')?.errors?.['required']"
+          >
+            A descrição é obrigatória.
+          </small>
+          <small
+            class="p-error"
+            *ngIf="productSaveForm.get('description')?.errors?.['maxlength']"
+          >
+            A descrição não pode exceder 60 caracteres.
+          </small>
+        </div>
       </div>
 
       <div class="field col-12 xl:col-4">
@@ -28,10 +48,29 @@
         <input
           pInputText
           id="cost"
-          type="number"
+          type="text"
           class="w-full"
           formControlName="cost"
+          ngxMask
+          mask="separator.3"
+          prefix="R$ "
+          thousandSeparator=","
+          decimalMarker="."
         />
+        <div
+          *ngIf="
+            productSaveForm.get('cost')?.invalid &&
+            productSaveForm.get('cost')?.touched
+          "
+        >
+          <small
+            class="p-error"
+            *ngIf="productSaveForm.get('cost')?.errors?.['pattern']"
+          >
+            O custo deve ser um número válido (máximo 13 dígitos inteiros e até
+            3 casas decimais).
+          </small>
+        </div>
       </div>
 
       <div class="field block col-12 xl:hidden">

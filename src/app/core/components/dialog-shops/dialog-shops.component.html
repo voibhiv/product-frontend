@@ -32,17 +32,60 @@
               [showClear]="true"
               placeholder="Selecione uma loja"
               optionLabel="displayName"
-            />
+              [ngClass]="{
+                'p-invalid':
+                  dialogForm.get('selectedShop')?.invalid &&
+                  dialogForm.get('selectedShop')?.touched,
+              }"
+            ></p-dropdown>
+            <div
+              *ngIf="
+                dialogForm.get('selectedShop')?.invalid &&
+                dialogForm.get('selectedShop')?.touched
+              "
+            >
+              <small
+                class="p-error"
+                *ngIf="dialogForm.get('selectedShop')?.errors?.['emptyShop']"
+              >
+                Selecione uma loja.
+              </small>
+            </div>
           </div>
           <div class="field xl:col-6 col-12">
             <label for="shopPrice" class="block">Preço de Venda *</label>
             <input
               pInputText
               id="shopPrice"
-              type="number"
+              type="text"
               class="w-full"
               formControlName="shopPrice"
+              ngxMask
+              mask="separator.3"
+              prefix="R$ "
+              thousandSeparator=","
+              decimalMarker="."
             />
+            <div
+              *ngIf="
+                dialogForm.get('shopPrice')?.invalid &&
+                dialogForm.get('shopPrice')?.touched
+              "
+            >
+              <small
+                class="p-error"
+                *ngIf="dialogForm.get('shopPrice')?.errors?.['required']"
+              >
+                O preço de venda é obrigatório.
+              </small>
+              <small
+                class="p-error"
+                *ngIf="dialogForm.get('shopPrice')?.errors?.['pattern']"
+              >
+                O preço deve ser um número válido (máximo 13 dígitos inteiros e
+                até 3 casas decimais).
+              </small>
+            </div>
           </div>
         </div>
       </form>
