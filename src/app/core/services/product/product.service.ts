@@ -5,6 +5,8 @@ import { Observable, of } from 'rxjs';
 import { IGetPaginateProducts } from './interfaces/get-paginate-products.interface';
 import { IGetProductResponse } from './interfaces/product-get.response.interface';
 import { IDeleteProductResponse } from './interfaces/product-delete.response.interface';
+import { Product } from '../../interfaces/product.interface';
+import { ICreateProduct } from './interfaces/create-product.request';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -36,8 +38,28 @@ export class ProductService {
     );
   }
 
-  createProduct() {
-    
-  }
+  createProduct(request: ICreateProduct) {
+    const formData = new FormData();
 
+    if (request.file) {
+      formData.append('file', request.file);
+    }
+
+    if (request.description) {
+      formData.append('description', request.description);
+    }
+
+    if (request.cost) {
+      formData.append('cost', request.cost.toString());
+    }
+
+    if (request.shops && request.shops.length > 0) {
+      formData.append('shops', JSON.stringify(request.shops));
+    }
+
+    return this.http.post<IGetProductResponse>(
+      `${this.apiUrl}/product/`,
+      formData,
+    );
+  }
 }

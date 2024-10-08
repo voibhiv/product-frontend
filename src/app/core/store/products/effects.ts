@@ -3,6 +3,9 @@ import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ProductService } from '../../services/product/product.service';
 import {
+  createProduct,
+  createProductError,
+  createProductSuccess,
   deleteProduct,
   deleteProductError,
   deleteProductSuccess,
@@ -65,6 +68,22 @@ export class ProductEffects {
         this.store.dispatch(loadProducts(form));
       }),
       map(() => ({ type: '[Product] No Action' })),
+    ),
+  );
+
+  createProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createProduct),
+      mergeMap((request) =>
+        this.productService.createProduct(request).pipe(
+          map((response: IGetProductResponse) =>
+            createProductSuccess(response),
+          ),
+          catchError((error: IErrorDefaultResponse) =>
+            of(createProductError(error)),
+          ),
+        ),
+      ),
     ),
   );
 }

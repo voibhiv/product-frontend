@@ -21,6 +21,9 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
+import { Store } from '@ngrx/store';
+import { ICreateProduct } from '../../core/services/product/interfaces/create-product.request';
+import { createProduct } from '../../core/store/products/action';
 
 @Component({
   selector: 'app-product-detail',
@@ -35,7 +38,7 @@ import { ButtonModule } from 'primeng/button';
     DialogShopsComponent,
     ToastModule,
     RippleModule,
-    ButtonModule
+    ButtonModule,
   ],
   providers: [DialogService, MessageService],
   templateUrl: './product-detail.component.html',
@@ -55,6 +58,7 @@ export class ProductDetailComponent implements OnInit {
     public dialogService: DialogService,
     private headerActionService: HeaderActionService,
     private messageService: MessageService,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +66,7 @@ export class ProductDetailComponent implements OnInit {
       (action) => {
         switch (action) {
           case 'save':
-            this.createProduct();
+            this.createProductFn();
             break;
           case 'delete':
             console.log('edited');
@@ -101,11 +105,11 @@ export class ProductDetailComponent implements OnInit {
   onSelect(event: any) {
     this.onClear();
     const file = event.files[0];
-
+    console.log(file);
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     if (fileExtension === 'jpg' || fileExtension === 'png') {
       const objectURL = URL.createObjectURL(file);
-      this.uploadedFiles.push({ ...file, objectURL });
+      this.uploadedFiles.push({ file, objectURL });
     } else {
       this.showInvalidFileMessage(file.name);
       this.onClear();
@@ -168,7 +172,7 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  createProduct() {
+  createProductFn() {
     if (this.formProductRegisterComponent) {
       const formGroup = this.formProductRegisterComponent.getFormGroup();
       const shopsValid = Boolean(this.product?.shops.length);
@@ -192,6 +196,32 @@ export class ProductDetailComponent implements OnInit {
         });
         return;
       }
+
+      let requestToCreateProduct: ICreateProduct = {} as ICreateProduct;
+
+      if (formGroup.value.cost) {
+        requestToCreateProduct.cost = formGroup.value.cost;
+      }
+
+      if (formGroup.value.description) {
+        requestToCreateProduct.description = formGroup.value.description;
+      }
+
+      if (this.uploadedFiles.length) {
+        const file = this.uploadedFiles[0].file;
+        requestToCreateProduct.file = file;
+      }
+
+      if (this.product.shops) {
+        requestToCreateProduct.shops = this.product.shops.map((shop) => {
+          return {
+            idShop: shop.idShop,
+            shopPrice: shop.shopPrice,
+          };
+        });
+      }
+
+      this.store.dispatch(createProduct(requestToCreateProduct));
     }
   }
 }
