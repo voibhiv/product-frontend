@@ -17,6 +17,10 @@ import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
 import { Shop } from '../../core/interfaces/shops.interface';
 import { HeaderActionService } from '../../core/services/header/header.service';
 import { Subscription } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-product-detail',
@@ -29,8 +33,11 @@ import { Subscription } from 'rxjs';
     BufferToImagePipe,
     DynamicDialogModule,
     DialogShopsComponent,
+    ToastModule,
+    RippleModule,
+    ButtonModule
   ],
-  providers: [DialogService],
+  providers: [DialogService, MessageService],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
@@ -40,13 +47,14 @@ export class ProductDetailComponent implements OnInit {
   uploadedFiles: any[] = [];
   ref: DynamicDialogRef | undefined;
   openModal: boolean = false;
-  public product!: Product | null;
+  public product!: Product;
   private actionSubscription: Subscription | undefined;
 
   constructor(
     private router: Router,
     public dialogService: DialogService,
     private headerActionService: HeaderActionService,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -163,10 +171,26 @@ export class ProductDetailComponent implements OnInit {
   createProduct() {
     if (this.formProductRegisterComponent) {
       const formGroup = this.formProductRegisterComponent.getFormGroup();
-      if (formGroup.valid) {
-        console.log('Form values:', formGroup.value);
-      } else {
-        console.log('Formulário inválido');
+      const shopsValid = Boolean(this.product?.shops.length);
+
+      if (!formGroup.valid) {
+        this.formProductRegisterComponent.markAllAsTouched();
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Formulário Inválido',
+          detail:
+            'O formulário enviado é inválido, verifique e tente novamente!',
+        });
+        return;
+      }
+
+      if (!shopsValid) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Formulário Inválido',
+          detail: 'O produto deve ter ao menos um preço cadastrado!',
+        });
+        return;
       }
     }
   }

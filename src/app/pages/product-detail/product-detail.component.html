@@ -1,4 +1,10 @@
-<app-dialog-shops [display]="openModal" (closedModal)="dialogClosed($event)" />
+<p-toast
+  [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'500ms'"
+  [hideTransitionOptions]="'500ms'"
+  [showTransformOptions]="'translateX(100%)'"
+/>
+<app-dialog-shops [display]="openModal" [product]="product" (closedModal)="dialogClosed($event)" />
 <div class="grid">
   <div class="col-12 xl:col-9">
     <app-form-product-register [product]="product">

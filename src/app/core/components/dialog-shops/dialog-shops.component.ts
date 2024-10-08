@@ -26,6 +26,10 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { IDialogShop } from '../../interfaces/dialog-shop.interface';
 import { NgxMaskDirective } from 'ngx-mask';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
+import { ToastModule } from 'primeng/toast';
+import { Product } from '../../interfaces/product.interface';
 
 @Component({
   selector: 'app-dialog-shops',
@@ -38,8 +42,11 @@ import { NgxMaskDirective } from 'ngx-mask';
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
-    NgxMaskDirective
+    NgxMaskDirective,
+    ToastModule,
+    RippleModule,
   ],
+  providers: [MessageService],
   templateUrl: './dialog-shops.component.html',
   styleUrl: './dialog-shops.component.scss',
 })
@@ -48,6 +55,7 @@ export class DialogShopsComponent implements OnChanges {
   shops$: Observable<IShopList[]>;
   selectedShop?: IShopList;
   @Input() display: boolean = false;
+  @Input() product!: Product;
   @Output() closedModal = new EventEmitter<null | IDialogShop>();
 
   dialogForm = new FormGroup({
@@ -66,7 +74,10 @@ export class DialogShopsComponent implements OnChanges {
     return value ? null : { emptyShop: true };
   }
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private messageService: MessageService,
+  ) {
     this.shops$ = this.store.select(selectAllShops).pipe(
       map((shops) =>
         shops.map((shop) => ({
@@ -98,13 +109,31 @@ export class DialogShopsComponent implements OnChanges {
   onSave() {
     if (this.dialogForm.invalid) {
       this.dialogForm.markAllAsTouched();
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Formulário Inválido',
+        detail:
+          'Um ou mais campos obrigatórios não foram preenchidos corretamente!',
+      });
       return;
     }
 
-    this.isSaved = true;
-    if (this.dialogForm.valid) {
-      const formValue = this.dialogForm.value;
-      this.closedModal.emit(formValue as IDialogShop);
+    const formValue = this.dialogForm.value;
+
+    const hasShopRegistered = this.product.shops.some(
+      (shop) => shop.idShop === formValue.selectedShop?.id,
+    );
+
+    if (hasShopRegistered) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Preço já cadastrado',
+        detail: 'Não é permitido mais que um preço de venda para a mesma loja',
+      });
+      return;
     }
+
+    this.closedModal.emit(formValue as IDialogShop);
+    this.isSaved = true;
   }
 }

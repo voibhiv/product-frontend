@@ -56,4 +56,8 @@ export class FormProductRegisterComponent implements OnInit {
       description: this.product?.description,
     });
   }
+
+  markAllAsTouched() {
+    this.productSaveForm.markAllAsTouched();
+  }
 }
