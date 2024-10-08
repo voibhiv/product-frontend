@@ -16,14 +16,15 @@ import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-
 import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
 import { Shop } from '../../core/interfaces/shops.interface';
 import { HeaderActionService } from '../../core/services/header/header.service';
-import { Observable, Subscription } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { Store } from '@ngrx/store';
 import { ICreateProduct } from '../../core/services/product/interfaces/create-product.request';
-import { createProduct } from '../../core/store/products/action';
+import { createProduct, deleteProduct } from '../../core/store/products/action';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-product-detail',
@@ -39,8 +40,9 @@ import { createProduct } from '../../core/store/products/action';
     ToastModule,
     RippleModule,
     ButtonModule,
+    ConfirmDialogModule,
   ],
-  providers: [DialogService, MessageService],
+  providers: [DialogService, MessageService, ConfirmationService],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
@@ -60,6 +62,7 @@ export class ProductDetailComponent implements OnInit {
     private headerActionService: HeaderActionService,
     private messageService: MessageService,
     private store: Store,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit(): void {
@@ -70,7 +73,7 @@ export class ProductDetailComponent implements OnInit {
             this.createProductFn();
             break;
           case 'delete':
-            console.log('edited');
+            this.deletedProductFn();
             break;
         }
       },
@@ -255,5 +258,25 @@ export class ProductDetailComponent implements OnInit {
       this.store.dispatch(createProduct(requestToCreateProduct));
       this.router.navigate(['/produto']);
     }
+  }
+
+  deletedProductFn() {
+    this.confirmationService.confirm({
+      message: `Tem certeza que deseja excluir este produto?`,
+      header: 'Excluir produto',
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+      accept: () => {
+        this.deleteProduct();
+      },
+    });
+  }
+
+  deleteProduct() {
+    this.store.dispatch(deleteProduct({ id: this.product.id }));
+    this.router.navigate(['/produto']);
   }
 }

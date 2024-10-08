@@ -17,6 +17,7 @@
             [rounded]="true"
             [raised]="true"
             severity="danger"
+            (click)="onDelete()"
           />
         } @else if (isRegister && !hasProduct) {
           <p-button
