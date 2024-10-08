@@ -16,14 +16,16 @@ import { ProductEffects } from './core/store/products/effects';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { shopReducer } from './core/store/shops/reducer';
+import { ShopEffects } from './core/store/shops/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideStore({ products: productReducer }),
-    provideEffects([ProductEffects]),
+    provideStore({ products: productReducer, shops: shopReducer }),
+    provideEffects([ProductEffects, ShopEffects]),
     provideEnvironmentNgxMask(),
     importProvidersFrom([BrowserModule, BrowserAnimationsModule]),
   ],

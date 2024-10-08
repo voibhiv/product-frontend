@@ -14,6 +14,10 @@ import {
 } from 'primeng/dynamicdialog';
 import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-shops.component';
 import { Shop } from '../../core/interfaces/shops.interface';
+import { IShopList } from '../../core/interfaces/shop-list.interface';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectAllShops } from '../../core/store/shops/selector';
 
 @Component({
   selector: 'app-product-detail',
@@ -31,14 +35,15 @@ import { Shop } from '../../core/interfaces/shops.interface';
   styleUrl: './product-detail.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
-  constructor(
-    private router: Router,
-    public dialogService: DialogService,
-  ) {}
   uploadedFiles: any[] = [];
   ref: DynamicDialogRef | undefined;
 
   public product!: Product | null;
+
+  constructor(
+    private router: Router,
+    public dialogService: DialogService,
+  ) {}
 
   ngOnInit(): void {
     const currentState = this.router.lastSuccessfulNavigation?.extras
