@@ -13,6 +13,8 @@ import {
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
 import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-shops.component';
+import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
+import { Shop } from '../../core/interfaces/shops.interface';
 
 @Component({
   selector: 'app-product-detail',
@@ -49,7 +51,17 @@ export class ProductDetailComponent implements OnInit {
   }
 
   setProduct(product: Product | null) {
-    this.product = product;
+    if (!product) {
+      this.product = {
+        description: '',
+        image: null,
+        shops: [] as Shop[],
+      } as Product;
+      return;
+    }
+  
+    this.product = JSON.parse(JSON.stringify(product));
+  
     if (this.product?.image) {
       this.setImageDefault(this.product.image);
     }
@@ -90,28 +102,23 @@ export class ProductDetailComponent implements OnInit {
 
   openDialogAddPrice() {
     this.openModal = true;
-    //   width: '50vw',
-    //   modal: true,
-    //   style: { 'min-height': '600px' },
-    //   data: {
-    //     ...this.product?.shops,
-    //   },
-    //   breakpoints: {
-    //     '960px': '75vw',
-    //     '640px': '90vw',
-    //   },
-    // });
-    // this.ref.onClose.subscribe((shop: Shop) => {
-    //   if (shop) {
-    //     console.log('tem produto');
-    //   } else {
-    //     console.log('nao tem produto');
-    //   }
-    // });
   }
 
-  dialogClosed(data: any) {
-    console.log(data);
+  addShopToProduct(data: IDialogShop) {
+    if (this.product) {
+      this.product.shops = this.product.shops || [];
+      this.product.shops.push({
+        idShop: data.selectedShop?.id,
+        description: data.selectedShop?.description,
+        shopPrice: data.shopPrice,
+      });
+    }
+  }
+
+  dialogClosed(data: IDialogShop | null) {
+    if (data) {
+      this.addShopToProduct(data);
+    }
     this.openModal = false;
   }
 }

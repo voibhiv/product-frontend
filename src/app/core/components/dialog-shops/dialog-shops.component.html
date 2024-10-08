@@ -20,12 +20,13 @@
 
   <ng-template pTemplate="content">
     <div class="dialog-content">
-      <form>
+      <form [formGroup]="dialogForm">
         <div class="xl:flex block">
           <div class="field xl:col-6 col-12 shop-dropdown-content">
             <label for="shops" class="block">Loja *</label>
             <p-dropdown
               id="shops"
+              formControlName="selectedShop"
               [options]="(shops$ | async) ?? []"
               [checkmark]="true"
               [showClear]="true"
@@ -35,7 +36,13 @@
           </div>
           <div class="field xl:col-6 col-12">
             <label for="shopPrice" class="block">Preço de Venda *</label>
-            <input pInputText id="shopPrice" type="number" class="w-full" />
+            <input
+              pInputText
+              id="shopPrice"
+              type="number"
+              class="w-full"
+              formControlName="shopPrice"
+            />
           </div>
         </div>
       </form>
