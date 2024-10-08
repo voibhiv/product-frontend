@@ -3,9 +3,12 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToolbarModule } from 'primeng/toolbar';
-import { filter } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { NavigationProductRegister } from '../../interfaces/navigation-product-register.interface';
 import { HeaderActionService } from '../../services/header/header.service';
+import { Product } from '../../interfaces/product.interface';
+import { Store } from '@ngrx/store';
+import { selectProductCreated } from '../../store/products/selector';
 
 @Component({
   selector: 'app-header-info',
@@ -19,11 +22,15 @@ export class HeaderInfoComponent implements OnInit {
   showHeader: boolean = false;
   hasProduct: boolean = false;
   isRegister: boolean = false;
+  public productCreated$!: Observable<Product | null>;
 
   constructor(
     private router: Router,
     private headerActionService: HeaderActionService,
-  ) {}
+    private store: Store,
+  ) {
+    this.productCreated$ = this.store.select(selectProductCreated);
+  }
 
   ngOnInit() {
     this.router.events
@@ -31,6 +38,13 @@ export class HeaderInfoComponent implements OnInit {
       .subscribe(() => {
         this.updatePropertiesBasedOnRoute();
       });
+
+    this.productCreated$.subscribe((value) => {
+      if (value) {
+        this.hasProduct = true;
+        this.isRegister = true;
+      }
+    });
   }
 
   updatePropertiesBasedOnRoute() {
@@ -71,5 +85,4 @@ export class HeaderInfoComponent implements OnInit {
   onUpdate() {
     this.headerActionService.emitAction('update');
   }
-
 }

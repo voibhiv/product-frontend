@@ -81,7 +81,6 @@ export class ProductEffects {
       mergeMap((request) =>
         this.productService.createProduct(request).pipe(
           map((response: ISaveProductResponse) => {
-            console.log('chegando aqui response: ', response);
             return createProductSuccess(response);
           }),
           catchError((error: IErrorDefaultResponse) =>

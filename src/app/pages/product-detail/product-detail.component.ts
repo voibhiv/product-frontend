@@ -89,6 +89,9 @@ export class ProductDetailComponent implements OnInit {
           summary: 'Produto cadastrado com sucesso!',
           detail: 'Produto foi cadastrado com sucesso sem interferências',
         });
+        if (value.id) {
+          this.product.id = value.id;
+        }
         this.product$.next(value);
       }
     });
@@ -103,10 +106,6 @@ export class ProductDetailComponent implements OnInit {
         });
       }
     });
-
-    this.product$.subscribe((value) =>
-      console.log('aaaaaaaaaaaaaaaaaaaaa => ', value),
-    );
 
     this.actionSubscription = this.headerActionService.action$.subscribe(
       (action) => {
@@ -160,7 +159,6 @@ export class ProductDetailComponent implements OnInit {
   onSelect(event: any) {
     this.onClear();
     const file = event.files[0];
-    console.log(file);
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     if (fileExtension === 'jpg' || fileExtension === 'png') {
       const objectURL = URL.createObjectURL(file);

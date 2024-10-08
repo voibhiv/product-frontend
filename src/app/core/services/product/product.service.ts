@@ -68,7 +68,6 @@ export class ProductService {
     request: ICreateProduct,
     id: number,
   ): Observable<ISaveProductResponse> {
-    console.log("cheguei aqui");
     const formData = new FormData();
 
     if (request.file) {
