@@ -104,6 +104,11 @@ export class ProductEffects {
           ),
         ),
       ),
+      withLatestFrom(this.store.select(selectForm)),
+      tap(([action, form]) => {
+        this.store.dispatch(loadProducts(form));
+      }),
+      map(() => ({ type: '[Product] No Action' })),
     ),
   );
 }
