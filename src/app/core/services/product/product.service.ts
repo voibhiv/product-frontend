@@ -26,7 +26,7 @@ export class ProductService {
     if (code) params = params.set('id', code.toString());
     if (description) params = params.set('description', description.toString());
     if (cost) params = params.set('cost', cost.toString());
-    if (shopPrice) params = params.set('shopPrice', shopPrice.toString());
+    if (shopPrice) params = params.set('salePrice', shopPrice.toString());
 
     return this.http.get<IGetProductResponse>(`${this.apiUrl}/product`, {
       params,
