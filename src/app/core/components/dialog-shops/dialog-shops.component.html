@@ -1,3 +1,44 @@
-<div>
-  testando
-</div>
+<p-dialog
+  [(visible)]="display"
+  [modal]="true"
+  [responsive]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw', 'min-height': '600px' }"
+  [draggable]="false"
+  (onHide)="onClose()"
+>
+  <ng-template pTemplate="header">
+    <div class="custom-header flex align-items-center justify-content-center">
+      <p-button
+        icon="pi pi-save"
+        label="Salvar"
+        (click)="onSave()"
+        severity="success"
+      />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="dialog-content">
+      <form>
+        <div class="xl:flex block">
+          <div class="field xl:col-6 col-12 shop-dropdown-content">
+            <label for="shops" class="block">Loja *</label>
+            <p-dropdown
+              id="shops"
+              [options]="(shops$ | async) ?? []"
+              [checkmark]="true"
+              [showClear]="true"
+              placeholder="Selecione uma loja"
+              optionLabel="displayName"
+            />
+          </div>
+          <div class="field xl:col-6 col-12">
+            <label for="shopPrice" class="block">Preço de Venda *</label>
+            <input pInputText id="shopPrice" type="number" class="w-full" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</p-dialog>

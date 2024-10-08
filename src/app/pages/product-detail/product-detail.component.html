@@ -1,3 +1,4 @@
+<app-dialog-shops [display]="openModal" (closedModal)="dialogClosed($event)" />
 <div class="grid">
   <div class="col-12 xl:col-9">
     <app-form-product-register [product]="product">
@@ -28,7 +29,10 @@
         </ng-template>
       </p-fileUpload>
     </app-form-product-register>
-    <app-list-shops [product]="product" (addPriceEmitter)="openDialogAddPrice()" />
+    <app-list-shops
+      [product]="product"
+      (addPriceEmitter)="openDialogAddPrice()"
+    />
   </div>
   <div class="col-12 hidden xl:col-3 xl:block">
     <div class="card">

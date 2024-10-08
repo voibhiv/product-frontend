@@ -13,11 +13,6 @@ import {
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
 import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-shops.component';
-import { Shop } from '../../core/interfaces/shops.interface';
-import { IShopList } from '../../core/interfaces/shop-list.interface';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectAllShops } from '../../core/store/shops/selector';
 
 @Component({
   selector: 'app-product-detail',
@@ -29,6 +24,7 @@ import { selectAllShops } from '../../core/store/shops/selector';
     CommonModule,
     BufferToImagePipe,
     DynamicDialogModule,
+    DialogShopsComponent,
   ],
   providers: [DialogService],
   templateUrl: './product-detail.component.html',
@@ -37,7 +33,7 @@ import { selectAllShops } from '../../core/store/shops/selector';
 export class ProductDetailComponent implements OnInit {
   uploadedFiles: any[] = [];
   ref: DynamicDialogRef | undefined;
-
+  openModal: boolean = false;
   public product!: Product | null;
 
   constructor(
@@ -93,25 +89,29 @@ export class ProductDetailComponent implements OnInit {
   }
 
   openDialogAddPrice() {
-    this.ref = this.dialogService.open(DialogShopsComponent, {
-      header: 'Inclusão de Preço',
-      width: '50vw',
-      modal: true,
-      data: {
-        ...this.product?.shops,
-      },
-      breakpoints: {
-        '960px': '75vw',
-        '640px': '90vw',
-      },
-    });
+    this.openModal = true;
+    //   width: '50vw',
+    //   modal: true,
+    //   style: { 'min-height': '600px' },
+    //   data: {
+    //     ...this.product?.shops,
+    //   },
+    //   breakpoints: {
+    //     '960px': '75vw',
+    //     '640px': '90vw',
+    //   },
+    // });
+    // this.ref.onClose.subscribe((shop: Shop) => {
+    //   if (shop) {
+    //     console.log('tem produto');
+    //   } else {
+    //     console.log('nao tem produto');
+    //   }
+    // });
+  }
 
-    this.ref.onClose.subscribe((shop: Shop) => {
-      if (shop) {
-        console.log('tem produto');
-      } else {
-        console.log('nao tem produto');
-      }
-    });
+  dialogClosed(data: any) {
+    console.log(data);
+    this.openModal = false;
   }
 }
