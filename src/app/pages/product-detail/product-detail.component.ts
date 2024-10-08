@@ -16,7 +16,7 @@ import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-
 import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
 import { Shop } from '../../core/interfaces/shops.interface';
 import { HeaderActionService } from '../../core/services/header/header.service';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
@@ -61,7 +61,7 @@ export class ProductDetailComponent implements OnInit {
   ref: DynamicDialogRef | undefined;
   openModal: boolean = false;
   public product!: Product;
-  public product$!: Observable<Product | null>;
+  public product$ = new BehaviorSubject<Product | null>(null);
   private actionSubscription: Subscription | undefined;
   public shopData: Shop | null = null;
   public productCreated$!: Observable<Product | null>;
@@ -89,6 +89,7 @@ export class ProductDetailComponent implements OnInit {
           summary: 'Produto cadastrado com sucesso!',
           detail: 'Produto foi cadastrado com sucesso sem interferências',
         });
+        this.product$.next(value);
       }
     });
 
@@ -102,6 +103,10 @@ export class ProductDetailComponent implements OnInit {
         });
       }
     });
+
+    this.product$.subscribe((value) =>
+      console.log('aaaaaaaaaaaaaaaaaaaaa => ', value),
+    );
 
     this.actionSubscription = this.headerActionService.action$.subscribe(
       (action) => {
@@ -133,12 +138,15 @@ export class ProductDetailComponent implements OnInit {
         image: null,
         shops: [] as Shop[],
       } as Product;
+      this.product$.next(this.product);
       return;
     }
 
     this.isCreate = false;
 
     this.product = JSON.parse(JSON.stringify(product));
+
+    this.product$.next(this.product);
 
     if (this.product?.image) {
       this.setImageDefault(this.product.image);

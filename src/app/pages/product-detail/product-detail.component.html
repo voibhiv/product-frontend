@@ -10,14 +10,14 @@
 <app-dialog-shops
   [display]="openModal"
   [shopData]="shopData"
-  [product]="product"
+  [product]="product$ | async"
   (closedModal)="dialogClosed($event)"
   (closedModalEdit)="dialogClosedEdit($event)"
 />
 
 <div class="grid">
   <div class="col-12 xl:col-9">
-    <app-form-product-register [product]="product">
+    <app-form-product-register [product]="product$ | async">
       <p-fileUpload
         id="image"
         name="demo[]"
@@ -46,7 +46,7 @@
       </p-fileUpload>
     </app-form-product-register>
     <app-list-shops
-      [product]="product"
+      [product]="product$ | async"
       (addPriceEmitter)="openDialogAddPrice()"
       (editPriceEmitter)="openDialogAddPrice($event)"
       (deletePriceEmitter)="deleteShopFromObject($event)"

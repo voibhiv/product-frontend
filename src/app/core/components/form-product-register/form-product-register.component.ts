@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -24,7 +30,7 @@ import { Product } from '../../interfaces/product.interface';
   templateUrl: './form-product-register.component.html',
   styleUrl: './form-product-register.component.scss',
 })
-export class FormProductRegisterComponent implements OnInit {
+export class FormProductRegisterComponent implements OnInit, OnChanges {
   @Input() product!: Product | null;
   uploadedFiles: any[] = [];
 
@@ -43,6 +49,12 @@ export class FormProductRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.patchFormValues();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['product']) {
+      this.patchFormValues();
+    }
   }
 
   getFormGroup() {

@@ -56,7 +56,7 @@ export class DialogShopsComponent implements OnChanges {
   shops$: Observable<IShopList[]>;
   selectedShop?: IShopList;
   @Input() display: boolean = false;
-  @Input() product!: Product;
+  @Input() product!: Product | null;
   @Input() shopData: Shop | null = null;
   @Output() closedModal = new EventEmitter<null | IDialogShop>();
   @Output() closedModalEdit = new EventEmitter<null | IDialogShop>();
@@ -146,7 +146,7 @@ export class DialogShopsComponent implements OnChanges {
     const formValue = this.dialogForm.getRawValue();
 
     if (!isEdit) {
-      const hasShopRegistered = this.product.shops.some(
+      const hasShopRegistered = this.product?.shops.some(
         (shop) => shop.idShop === formValue.selectedShop?.id,
       );
 
