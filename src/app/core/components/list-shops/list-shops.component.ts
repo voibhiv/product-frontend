@@ -16,8 +16,18 @@ import { Product } from '../../interfaces/product.interface';
 export class ListShopsComponent {
   @Input() product!: Product | null;
   @Output() addPriceEmitter = new EventEmitter();
+  @Output() editPriceEmitter = new EventEmitter<Shop>();
+  @Output() deletePriceEmitter = new EventEmitter<Shop>();
 
   openDialogEmitter() {
     this.addPriceEmitter.emit();
+  }
+
+  editShop(shop: Shop) {
+    this.editPriceEmitter.emit(shop);
+  }
+
+  deleteShop(shop: Shop) {
+    this.deletePriceEmitter.emit(shop);
   }
 }

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectAllShops } from '../../store/shops/selector';
-import { map, Observable } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { IShopList } from '../../interfaces/shop-list.interface';
 import { DropdownModule } from 'primeng/dropdown';
 import {
@@ -30,6 +30,7 @@ import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 import { Product } from '../../interfaces/product.interface';
+import { Shop } from '../../interfaces/shops.interface';
 
 @Component({
   selector: 'app-dialog-shops',
@@ -56,7 +57,9 @@ export class DialogShopsComponent implements OnChanges {
   selectedShop?: IShopList;
   @Input() display: boolean = false;
   @Input() product!: Product;
+  @Input() shopData: Shop | null = null;
   @Output() closedModal = new EventEmitter<null | IDialogShop>();
+  @Output() closedModalEdit = new EventEmitter<null | IDialogShop>();
 
   dialogForm = new FormGroup({
     selectedShop: new FormControl<IShopList | null>(null, [
@@ -92,12 +95,34 @@ export class DialogShopsComponent implements OnChanges {
     if (changes['display'] && changes['display'].currentValue) {
       this.initializeForm();
     }
+
+    if (changes['shopData'] && this.shopData) {
+      const { idShop, shopPrice } = this.shopData;
+
+      this.shops$.pipe(take(1)).subscribe((shops) => {
+        const matchingShop = shops.find(
+          (shop) =>
+            shop.id === idShop &&
+            shop.description === this.shopData?.description,
+        );
+
+        if (matchingShop) {
+          this.dialogForm.patchValue({
+            selectedShop: matchingShop,
+            shopPrice: shopPrice,
+          });
+
+          this.dialogForm.get('selectedShop')?.disable();
+        }
+      });
+    }
   }
 
   initializeForm() {
     this.dialogForm.reset();
     this.selectedShop = {} as IShopList;
     this.isSaved = false;
+    this.dialogForm.get('selectedShop')?.enable();
   }
 
   onClose() {
@@ -106,7 +131,7 @@ export class DialogShopsComponent implements OnChanges {
     }
   }
 
-  onSave() {
+  onSave(isEdit: boolean = false) {
     if (this.dialogForm.invalid) {
       this.dialogForm.markAllAsTouched();
       this.messageService.add({
@@ -118,22 +143,28 @@ export class DialogShopsComponent implements OnChanges {
       return;
     }
 
-    const formValue = this.dialogForm.value;
+    const formValue = this.dialogForm.getRawValue();
 
-    const hasShopRegistered = this.product.shops.some(
-      (shop) => shop.idShop === formValue.selectedShop?.id,
-    );
+    if (!isEdit) {
+      const hasShopRegistered = this.product.shops.some(
+        (shop) => shop.idShop === formValue.selectedShop?.id,
+      );
 
-    if (hasShopRegistered) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Preço já cadastrado',
-        detail: 'Não é permitido mais que um preço de venda para a mesma loja',
-      });
-      return;
+      if (hasShopRegistered) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Preço já cadastrado',
+          detail:
+            'Não é permitido mais que um preço de venda para a mesma loja',
+        });
+        return;
+      }
+
+      this.closedModal.emit(formValue as IDialogShop);
     }
 
-    this.closedModal.emit(formValue as IDialogShop);
+    this.closedModalEdit.emit(formValue as IDialogShop);
+
     this.isSaved = true;
   }
 }

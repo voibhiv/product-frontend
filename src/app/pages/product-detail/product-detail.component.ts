@@ -52,6 +52,7 @@ export class ProductDetailComponent implements OnInit {
   openModal: boolean = false;
   public product!: Product;
   private actionSubscription: Subscription | undefined;
+  public shopData: Shop | null = null;
 
   constructor(
     private router: Router,
@@ -144,8 +145,23 @@ export class ProductDetailComponent implements OnInit {
     this.uploadedFiles = [];
   }
 
-  openDialogAddPrice() {
+  openDialogAddPrice(shop?: Shop) {
+    if (shop) {
+      this.shopData = shop;
+    }
     this.openModal = true;
+  }
+
+  deleteShopFromObject(shop: Shop) {
+    if (this.product && this.product.shops) {
+      const shopIndex = this.product.shops.findIndex(
+        (existingShop) => existingShop.idShop === shop.idShop,
+      );
+
+      if (shopIndex !== -1) {
+        this.product.shops.splice(shopIndex, 1);
+      }
+    }
   }
 
   addShopToProduct(data: IDialogShop) {
@@ -164,6 +180,21 @@ export class ProductDetailComponent implements OnInit {
       this.addShopToProduct(data);
     }
     this.openModal = false;
+    this.shopData = null;
+  }
+
+  dialogClosedEdit(data: IDialogShop | null) {
+    if (data) {
+      const shopIndex = this.product.shops.findIndex(
+        (shop) => shop.idShop === data.selectedShop.id,
+      );
+
+      if (shopIndex !== -1) {
+        this.product.shops[shopIndex].shopPrice = data.shopPrice;
+      }
+    }
+    this.openModal = false;
+    this.shopData = null;
   }
 
   ngOnDestroy(): void {

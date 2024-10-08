@@ -4,7 +4,13 @@
   [hideTransitionOptions]="'500ms'"
   [showTransformOptions]="'translateX(100%)'"
 />
-<app-dialog-shops [display]="openModal" [product]="product" (closedModal)="dialogClosed($event)" />
+<app-dialog-shops
+  [display]="openModal"
+  [shopData]="shopData"
+  [product]="product"
+  (closedModal)="dialogClosed($event)"
+  (closedModalEdit)="dialogClosedEdit($event)"
+/>
 <div class="grid">
   <div class="col-12 xl:col-9">
     <app-form-product-register [product]="product">
@@ -38,6 +44,8 @@
     <app-list-shops
       [product]="product"
       (addPriceEmitter)="openDialogAddPrice()"
+      (editPriceEmitter)="openDialogAddPrice($event)"
+      (deletePriceEmitter)="deleteShopFromObject($event)"
     />
   </div>
   <div class="col-12 hidden xl:col-3 xl:block">

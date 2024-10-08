@@ -7,12 +7,18 @@
     [tableStyle]="{ 'min-width': '60rem' }"
   >
     <ng-template pTemplate="caption">
-      <p-button icon="pi pi-plus" [rounded]="true" [raised]="true" (click)="openDialogEmitter()" />
+      <p-button
+        icon="pi pi-plus"
+        [rounded]="true"
+        [raised]="true"
+        (click)="openDialogEmitter()"
+      />
     </ng-template>
     <ng-template pTemplate="header">
       <tr class="h-4rem header-table">
-        <th class="w-6">Loja</th>
-        <th class="w-6">Preço de Venda</th>
+        <th class="w-5">Loja</th>
+        <th class="w-5">Preço de Venda</th>
+        <th class="w-2"></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-shop>
@@ -22,6 +28,20 @@
         </td>
         <td>
           {{ shop.shopPrice | currency: 'BRL' }}
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            (onClick)="editShop(shop)"
+          />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            (onClick)="deleteShop(shop)"
+          />
         </td>
       </tr>
     </ng-template>

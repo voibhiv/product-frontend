@@ -18,7 +18,7 @@
       <p-button
         icon="pi pi-save"
         label="Salvar"
-        (click)="onSave()"
+        (click)="shopData ? onSave(true) : onSave()"
         severity="success"
       />
     </div>
