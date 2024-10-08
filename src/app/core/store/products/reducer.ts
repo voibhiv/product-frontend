@@ -11,6 +11,8 @@ import {
   loadProducts,
   loadProductsFailure,
   loadProductsSuccess,
+  updateProductError,
+  updateProductSuccess,
 } from './action';
 import { IDeleteProductResponse } from '../../services/product/interfaces/product-delete.response.interface';
 import { IErrorDefaultResponse } from '../../services/product/interfaces/error-default.response.interface';
@@ -57,6 +59,13 @@ export const initialStateDelete: ProductRemoveState = {
 };
 
 export const initialStateCreate: ProductCreateState = {
+  product: {} as Product,
+  errorMessage: null,
+  success: false,
+  loading: false,
+};
+
+export const initialStateUpdate: ProductCreateState = {
   product: {} as Product,
   errorMessage: null,
   success: false,
@@ -127,6 +136,32 @@ export const productCreateReducer = createReducer(
   })),
 
   on(createProductSuccess, (state, response: ISaveProductResponse) => ({
+    ...state,
+    loading: false,
+    success: true,
+    product: response.data.product,
+    errorMessage: null,
+  })),
+);
+
+export const productUpdateReducer = createReducer(
+  initialStateUpdate,
+
+  on(createProduct, (state) => ({
+    ...state,
+    loading: true,
+    errorMessage: null,
+    success: false,
+  })),
+
+  on(updateProductError, (state, response: IErrorDefaultResponse) => ({
+    ...state,
+    loading: false,
+    success: false,
+    errorMessage: response.message,
+  })),
+
+  on(updateProductSuccess, (state, response: ISaveProductResponse) => ({
     ...state,
     loading: false,
     success: true,

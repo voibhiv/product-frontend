@@ -7,6 +7,9 @@ export const selectProductState =
 export const selectCreateProductState =
   createFeatureSelector<ProductCreateState>('product');
 
+  export const selectUpdateProductState =
+  createFeatureSelector<ProductCreateState>('productUpdate');
+
 export const selectAllProducts = createSelector(
   selectProductState,
   (state: ProductState) => state.products,
@@ -34,5 +37,10 @@ export const selectForm = createSelector(
 
 export const selectProductCreated = createSelector(
   selectCreateProductState,
+  (state: ProductCreateState) => state.product,
+);
+
+export const selectProductUpdated = createSelector(
+  selectUpdateProductState,
   (state: ProductCreateState) => state.product,
 );

@@ -23,7 +23,11 @@ import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { Store } from '@ngrx/store';
 import { ICreateProduct } from '../../core/services/product/interfaces/create-product.request';
-import { createProduct, deleteProduct } from '../../core/store/products/action';
+import {
+  createProduct,
+  deleteProduct,
+  updateProduct,
+} from '../../core/store/products/action';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
@@ -71,6 +75,9 @@ export class ProductDetailComponent implements OnInit {
         switch (action) {
           case 'save':
             this.createProductFn();
+            break;
+          case 'update':
+            this.updateProductFn();
             break;
           case 'delete':
             this.deletedProductFn();
@@ -256,6 +263,62 @@ export class ProductDetailComponent implements OnInit {
       }
 
       this.store.dispatch(createProduct(requestToCreateProduct));
+      this.router.navigate(['/produto']);
+    }
+  }
+
+  updateProductFn() {
+    if (this.formProductRegisterComponent) {
+      const formGroup = this.formProductRegisterComponent.getFormGroup();
+      const shopsValid = Boolean(this.product?.shops.length);
+
+      if (!formGroup.valid) {
+        this.formProductRegisterComponent.markAllAsTouched();
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Formulário Inválido',
+          detail:
+            'O formulário enviado é inválido, verifique e tente novamente!',
+        });
+        return;
+      }
+
+      if (!shopsValid) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Formulário Inválido',
+          detail: 'O produto deve ter ao menos um preço cadastrado!',
+        });
+        return;
+      }
+
+      let requestToCreateProduct: ICreateProduct = {} as ICreateProduct;
+
+      if (formGroup.value.cost) {
+        requestToCreateProduct.cost = formGroup.value.cost;
+      }
+
+      if (formGroup.value.description) {
+        requestToCreateProduct.description = formGroup.value.description;
+      }
+
+      if (this.uploadedFiles.length) {
+        const file = this.uploadedFiles[0].file;
+        requestToCreateProduct.file = file;
+      }
+
+      if (this.product.shops) {
+        requestToCreateProduct.shops = this.product.shops.map((shop) => {
+          return {
+            idShop: shop.idShop,
+            shopPrice: shop.shopPrice,
+          };
+        });
+      }
+
+      this.store.dispatch(
+        updateProduct({ request: requestToCreateProduct, id: this.product.id }),
+      );
       this.router.navigate(['/produto']);
     }
   }

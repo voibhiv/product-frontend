@@ -12,6 +12,9 @@ import {
   loadProducts,
   loadProductsFailure,
   loadProductsSuccess,
+  updateProduct,
+  updateProductError,
+  updateProductSuccess,
 } from './action';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
@@ -82,6 +85,22 @@ export class ProductEffects {
           ),
           catchError((error: IErrorDefaultResponse) =>
             of(createProductError(error)),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  updateProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateProduct),
+      mergeMap(({ request, id }) =>
+        this.productService.updateProduct(request, id).pipe(
+          map((response: ISaveProductResponse) =>
+            updateProductSuccess(response),
+          ),
+          catchError((error: IErrorDefaultResponse) =>
+            of(updateProductError(error)),
           ),
         ),
       ),

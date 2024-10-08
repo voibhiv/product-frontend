@@ -55,3 +55,18 @@ export const createProductError = createAction(
   '[Product] Create Product Error',
   props<IErrorDefaultResponse>(),
 );
+
+export const updateProduct = createAction(
+  '[Product] Update Product',
+  props<{request: ICreateProduct, id: number}>(),
+);
+
+export const updateProductSuccess = createAction(
+  '[Product] Update Product Success',
+  props<ISaveProductResponse>(),
+);
+
+export const updateProductError = createAction(
+  '[Product] Update Product Error',
+  props<IErrorDefaultResponse>(),
+);

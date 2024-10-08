@@ -63,4 +63,33 @@ export class ProductService {
       formData,
     );
   }
+
+  updateProduct(
+    request: ICreateProduct,
+    id: number,
+  ): Observable<ISaveProductResponse> {
+    console.log("cheguei aqui");
+    const formData = new FormData();
+
+    if (request.file) {
+      formData.append('file', request.file);
+    }
+
+    if (request.description) {
+      formData.append('description', request.description);
+    }
+
+    if (request.cost) {
+      formData.append('cost', request.cost.toString());
+    }
+
+    if (request.shops && request.shops.length > 0) {
+      formData.append('shops', JSON.stringify(request.shops));
+    }
+
+    return this.http.put<ISaveProductResponse>(
+      `${this.apiUrl}/product/${id}`,
+      formData,
+    );
+  }
 }

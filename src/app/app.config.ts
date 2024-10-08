@@ -14,6 +14,7 @@ import { provideEffects } from '@ngrx/effects';
 import {
   productCreateReducer,
   productReducer,
+  productUpdateReducer,
 } from './core/store/products/reducer';
 import { ProductEffects } from './core/store/products/effects';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
       products: productReducer,
       shops: shopReducer,
       product: productCreateReducer,
+      productUpdate: productUpdateReducer,
     }),
     provideEffects([ProductEffects, ShopEffects]),
     provideEnvironmentNgxMask(),

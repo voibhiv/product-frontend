@@ -68,4 +68,8 @@ export class HeaderInfoComponent implements OnInit {
     this.headerActionService.emitAction('delete');
   }
 
+  onUpdate() {
+    this.headerActionService.emitAction('update');
+  }
+
 }
