@@ -139,7 +139,7 @@ export const productCreateReducer = createReducer(
     ...state,
     loading: false,
     success: true,
-    product: response.data.product,
+    product: response.data,
     errorMessage: null,
   })),
 );
@@ -165,7 +165,7 @@ export const productUpdateReducer = createReducer(
     ...state,
     loading: false,
     success: true,
-    product: response.data.product,
+    product: response.data,
     errorMessage: null,
   })),
 );

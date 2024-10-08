@@ -16,7 +16,7 @@ import { DialogShopsComponent } from '../../core/components/dialog-shops/dialog-
 import { IDialogShop } from '../../core/interfaces/dialog-shop.interface';
 import { Shop } from '../../core/interfaces/shops.interface';
 import { HeaderActionService } from '../../core/services/header/header.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
@@ -29,6 +29,10 @@ import {
   updateProduct,
 } from '../../core/store/products/action';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {
+  selectProductCreated,
+  selectProductUpdated,
+} from '../../core/store/products/selector';
 
 @Component({
   selector: 'app-product-detail',
@@ -57,8 +61,12 @@ export class ProductDetailComponent implements OnInit {
   ref: DynamicDialogRef | undefined;
   openModal: boolean = false;
   public product!: Product;
+  public product$!: Observable<Product | null>;
   private actionSubscription: Subscription | undefined;
   public shopData: Shop | null = null;
+  public productCreated$!: Observable<Product | null>;
+  public productUpdated$!: Observable<Product | null>;
+  isCreate: boolean = false;
 
   constructor(
     private router: Router,
@@ -67,9 +75,34 @@ export class ProductDetailComponent implements OnInit {
     private messageService: MessageService,
     private store: Store,
     private confirmationService: ConfirmationService,
-  ) {}
+  ) {
+    this.productCreated$ = this.store.select(selectProductCreated);
+    this.productUpdated$ = this.store.select(selectProductUpdated);
+  }
 
   ngOnInit(): void {
+    this.productCreated$.subscribe((value) => {
+      if (value) {
+        this.isCreate = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Produto cadastrado com sucesso!',
+          detail: 'Produto foi cadastrado com sucesso sem interferências',
+        });
+      }
+    });
+
+    this.productUpdated$.subscribe((value) => {
+      if (value) {
+        this.isCreate = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Produto atualizado com sucesso!',
+          detail: 'Produto foi atualizado com sucesso sem interferências',
+        });
+      }
+    });
+
     this.actionSubscription = this.headerActionService.action$.subscribe(
       (action) => {
         switch (action) {
@@ -94,6 +127,7 @@ export class ProductDetailComponent implements OnInit {
 
   setProduct(product: Product | null) {
     if (!product) {
+      this.isCreate = true;
       this.product = {
         description: '',
         image: null,
@@ -101,6 +135,8 @@ export class ProductDetailComponent implements OnInit {
       } as Product;
       return;
     }
+
+    this.isCreate = false;
 
     this.product = JSON.parse(JSON.stringify(product));
 
@@ -263,7 +299,6 @@ export class ProductDetailComponent implements OnInit {
       }
 
       this.store.dispatch(createProduct(requestToCreateProduct));
-      this.router.navigate(['/produto']);
     }
   }
 
@@ -319,7 +354,6 @@ export class ProductDetailComponent implements OnInit {
       this.store.dispatch(
         updateProduct({ request: requestToCreateProduct, id: this.product.id }),
       );
-      this.router.navigate(['/produto']);
     }
   }
 

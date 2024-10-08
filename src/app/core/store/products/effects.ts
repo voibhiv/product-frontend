@@ -80,9 +80,10 @@ export class ProductEffects {
       ofType(createProduct),
       mergeMap((request) =>
         this.productService.createProduct(request).pipe(
-          map((response: ISaveProductResponse) =>
-            createProductSuccess(response),
-          ),
+          map((response: ISaveProductResponse) => {
+            console.log('chegando aqui response: ', response);
+            return createProductSuccess(response);
+          }),
           catchError((error: IErrorDefaultResponse) =>
             of(createProductError(error)),
           ),
@@ -104,11 +105,6 @@ export class ProductEffects {
           ),
         ),
       ),
-      withLatestFrom(this.store.select(selectForm)),
-      tap(([action, form]) => {
-        this.store.dispatch(loadProducts(form));
-      }),
-      map(() => ({ type: '[Product] No Action' })),
     ),
   );
 }
